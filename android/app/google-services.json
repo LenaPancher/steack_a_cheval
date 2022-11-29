@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "305496774776",
+    "project_id": "steak-a-cheval",
+    "storage_bucket": "steak-a-cheval.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:305496774776:android:34c4241244e5580bb2758d",
+        "android_client_info": {
+          "package_name": "com.example.steack_a_cheval"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "305496774776-bomnctl54q9t0rq24tdnrbuh7cb6opbe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAifO0896Hg_fpURyzy7vwc-O1WRAk5PNA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "305496774776-bomnctl54q9t0rq24tdnrbuh7cb6opbe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
