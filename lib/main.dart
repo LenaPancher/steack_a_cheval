@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       routes: {
-        LoginPage.tag:(context) => const LoginPage(),
+        LoginPage.tag: (context) => const LoginPage(),
         SignUpPage.tag: (context) => const SignUpPage(),
         FeedPage.tag: (context) => const FeedPage(),
         ProfilPage.tag: (context) => const ProfilPage(),
