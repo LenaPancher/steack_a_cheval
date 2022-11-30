@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:steack_a_cheval/api/people_service.dart';
+import 'package:steack_a_cheval/models/People.dart';
+import 'package:steack_a_cheval/pages/profil.dart';
 
 class FeedPage extends StatefulWidget {
   static const tag = "feed";
@@ -10,6 +13,13 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
+  PeopleService peopleService = PeopleService();
+
+
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var primaryColor = Theme.of(context).iconTheme.color;
@@ -21,6 +31,7 @@ class _FeedPageState extends State<FeedPage> {
         leading: IconButton(
           onPressed: () {
             // Navigate to profile page
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilPage()),);
           },
           icon: const Icon(Icons.person),
         ),
@@ -89,7 +100,7 @@ class _FeedPageState extends State<FeedPage> {
           )
         ],
       ),
-      body: Column(),
+      body: Text("")
     );
   }
 }

@@ -1,50 +1,70 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:steack_a_cheval/models/People.dart';
+
+import 'exceptions.dart';
 
 class PeopleService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  signUp(People people) async {
+  Future<UserCredential> signUp(People people) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: people.email,
-          password: people.password
-      );
-      print(userCredential.user);
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: people.email, password: people.password);
       String? userId = userCredential.user?.uid;
       people.uid = userId!;
-      print(people.toJson());
       await _db.collection("people").add(people.toJson());
-      await Future.delayed(Duration(seconds: 2));
-      DocumentSnapshot<Map<String, dynamic>> snapshot = await _db.collection("people").doc("NE3BUgyYUMiGUypfUQQr").get();
-      print(snapshot.data());
+      return userCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        throw SteakException(message: 'Mot de passe trop faible.');
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        throw SteakException(message: 'Adresse mail déjà utilisé.');
+      } else {
+        throw SteakException(message: 'Impossible de s\'inscrire');
       }
     } catch (e) {
-      print(e);
+      throw SteakException(message: 'Impossible de s\'inscrire');
     }
   }
 
-  signIn(String email, String password) async {
+  Future<UserCredential> signIn(String email, String password) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: password
-      );
-      print("c'est bon");
-      print(userCredential);
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      return userCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        throw SteakException(message: 'Utilisateur non trouvé.');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        throw SteakException(message: 'Mot de passe incorect.');
+      } else {
+        throw SteakException(message: 'Impossible de se connecter ');
       }
     }
+  }
+
+  Future<People> currentUser() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      QuerySnapshot snapshot = await _db
+          .collection('people')
+          .where("firebase_id",
+              isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+          .get();
+
+      final peopleJson = snapshot.docs[0].data() as Map<String, dynamic>;
+      People currentPeople = People.fromJson(peopleJson);
+      return currentPeople;
+    }
+    throw SteakException(message: 'Impossible de trouver le user :(');
+  }
+
+  Future updateProfile(People people) async {
+    QuerySnapshot snapshot = await _db
+        .collection('people')
+        .where("firebase_id", isEqualTo: FirebaseAuth.instance.currentUser?.uid).get();
+    var user = snapshot.docs[0].reference.update(people.toJson());
+    print("USER === $user");
   }
 }
