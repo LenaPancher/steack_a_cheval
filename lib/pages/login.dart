@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:steack_a_cheval/pages/feed.dart';
 import 'package:steack_a_cheval/pages/sign_up.dart';
 
 import '../api/people_service.dart';
@@ -119,11 +120,16 @@ class _LoginPageState extends State<LoginPage> {
                           child: ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
+                                // Check authentification
                                 peopleService.signIn(emailController.text, passwordController.text);
+                                // TODO
+                                // Handle errors here or create a service for handling auth errors
+
+                                // If no errors, push to feed page
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const FeedPage()),);
+
                                 emailController.text = "";
                                 passwordController.text = "";
-                                print("c'est bon");
-                                print(peopleService);
                               }
                             },
                             child: const Text("Se connecter"),

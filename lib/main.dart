@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:steack_a_cheval/pages/feed.dart';
 import 'package:steack_a_cheval/pages/login.dart';
 import 'package:steack_a_cheval/pages/sign_up.dart';
 
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       routes: {
         LoginPage.tag:(context) => const LoginPage(),
         SignUpPage.tag: (context) => const SignUpPage(),
+        FeedPage.tag: (context) => const FeedPage(),
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
