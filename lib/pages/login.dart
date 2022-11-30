@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                                 // Handle errors here or create a service for handling auth errors
 
                                 // If no errors, push to feed page
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const FeedPage()),);
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const FeedPage()),);
 
                                 emailController.text = "";
                                 passwordController.text = "";

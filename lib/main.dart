@@ -33,6 +33,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: const Color(0xFFA73322),
         ),
+        iconTheme: const IconThemeData(
+          color: Color(0xFFA73322)
+        )
       ),
       home: const LoginPage(),
     );

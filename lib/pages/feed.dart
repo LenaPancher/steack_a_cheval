@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class FeedPage extends StatefulWidget {
   static const tag = "feed";
+
   const FeedPage({Key? key}) : super(key: key);
 
   @override
@@ -11,22 +12,84 @@ class FeedPage extends StatefulWidget {
 class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
+    var primaryColor = Theme.of(context).iconTheme.color;
+
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text("Fil d'actualité"),
-      ),
-      drawer: Drawer(
-        child: Column(
-          children: const [
-            Text("Cours"),
-            Text("Soirées"),
-          ],
+        leading: IconButton(
+          onPressed: () {
+            // Navigate to profile page
+          },
+          icon: const Icon(Icons.person),
         ),
-      ),
-      body: Column(
+        actions: [
+          PopupMenuButton(
+            offset: const Offset(0, 45),
+            // SET THE (X,Y) POSITION
+            iconSize: 30,
+            icon: const Padding(
+              padding: EdgeInsets.only(right: 8.0),
+              child: Icon(
+                Icons.menu, // CHOOSE YOUR CUSTOM ICON
+              ),
+            ),
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem<int>(
+                  value: 0,
+                  child: Row(
+                    children: [
+                      Icon(Icons.content_paste, color: primaryColor),
+                      SizedBox(width: 12),
+                      Text("Concours"),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<int>(
+                  value: 1,
+                  child: Row(
+                    children: [
+                      Icon(Icons.class_, color: primaryColor),
+                      SizedBox(width: 12),
+                      Text("Cours"),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<int>(
+                  value: 2,
+                  child: Row(
+                    children: [
+                      Icon(Icons.wc, color: primaryColor),
+                      SizedBox(width: 12),
+                      Text("Soirées"),
+                    ],
+                  ),
+                ),
+              ];
+            },
+            // TODO PUSH LES VUES ICI !!!
+            onSelected: (value) {
+              switch (value) {
+                case 0:
+                  // PUSH LA VUE CONCOURS
 
-      ),
+                  break;
+                case 1:
+                  // PUSH LA VUE COURS
 
+                  break;
+                case 2:
+                  // PUSH LA VUE SOIREES
+
+                  break;
+              }
+            },
+          )
+        ],
+      ),
+      body: Column(),
     );
   }
 }
