@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:steack_a_cheval/pages/concours.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:steack_a_cheval/pages/feed.dart';
 import 'package:steack_a_cheval/pages/horse_proprietaire.dart';
 import 'package:steack_a_cheval/pages/login.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       routes: {
-        LoginPage.tag:(context) => const LoginPage(),
+        LoginPage.tag: (context) => const LoginPage(),
         SignUpPage.tag: (context) => const SignUpPage(),
         FeedPage.tag: (context) => const FeedPage(),
         ProfilPage.tag: (context) => const ProfilPage(),
@@ -45,6 +46,10 @@ class MyApp extends StatelessWidget {
           color: Color(0xFFA73322)
         )
       ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       home: const LoginPage(),
     );
   }
