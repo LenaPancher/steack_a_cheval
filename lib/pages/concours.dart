@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:steack_a_cheval/pages/particpantConcours.dart';
 
 class ConcoursPage extends StatefulWidget {
   static const tag = "concours";
@@ -20,20 +21,27 @@ class _ConcoursPage extends State<ConcoursPage> {
   TextEditingController authorConcoursController = TextEditingController();
   TextEditingController dateConcoursController = TextEditingController();
 
+
   final _formKey = GlobalKey<FormState>();
 
   void _addUser(){
     setState(() {
       var nameConcour = nameConcourController.text;
-      var adressConcours = adresseConcoursController.text;
-      var authorConcours = authorConcoursController.text;
-      var dateConcours = dateConcoursController.text;
+      var adressConcour = adresseConcoursController.text;
+      var authorConcour = authorConcoursController.text;
+      var dateConcour = dateConcoursController.text;
 
       print(nameConcour);
-      print(adressConcours);
-      print(authorConcours);
-      print(dateConcours);
+      print(adressConcour);
+      print(authorConcour);
+      print(dateConcour);
 
+    });
+  }
+
+  void _joinConcours(){
+    setState(() {
+      print('ajout du participant');
     });
   }
 
@@ -43,13 +51,16 @@ class _ConcoursPage extends State<ConcoursPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          TextButton(
+        title: const Text("Concours"),
 
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
+        actions: [
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
                     return AlertDialog(
                       content: Stack(
                         children: <Widget>[
@@ -141,16 +152,16 @@ class _ConcoursPage extends State<ConcoursPage> {
                                   child: const Text('Cancel'),
                                 ),
                                 TextButton(
-                                  onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      _addUser();
-                                    }
-                                    nameConcourController.text = "";
-                                    adresseConcoursController.text = "";
-                                    authorConcoursController.text = "";
-                                    dateConcoursController.text = "";
-                                  },
-                                  child: const Text('Submit')
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        _addUser();
+                                      }
+                                      nameConcourController.text = "";
+                                      adresseConcoursController.text = "";
+                                      authorConcoursController.text = "";
+                                      dateConcoursController.text = "";
+                                    },
+                                    child: const Text('Submit')
                                 ),
                               ],
                             ),
@@ -159,14 +170,15 @@ class _ConcoursPage extends State<ConcoursPage> {
                       ),
                     );
                   }
-                );
-              },
-              child: const Icon(
-                Icons.add,
-                color: Colors.white,
-                size: 40,
-            ),
-          )
+                  );
+                },
+                child: Icon(
+                  Icons.add,
+                  size: 26.0,
+                ),
+              )
+          ),
+
         ],
       ),
       body: ListView.builder(
@@ -182,71 +194,92 @@ class _ConcoursPage extends State<ConcoursPage> {
                     AspectRatio(
                       aspectRatio: 1.0,
                       child: Container(
-                        decoration: const BoxDecoration(color: Colors.blue),
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage("images/concour.jpeg"),
+                              fit: BoxFit.fitHeight
+                            )),
                       ),
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
+                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 2.0, 0.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const <Widget>[
-                                  Text(
-                                    'Course de la motte',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                            Row(
+                              children:[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const <Widget>[
+                                    Text(
+                                      'Course de la motte',
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
                                     ),
-                                  ),
-                                  Padding(padding: EdgeInsets.only(bottom: 2.0)),
-                                  Text(
-                                    '52 rue de coubertin',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                      color: Colors.black54,
+                                    Padding(padding: EdgeInsets.only(bottom: 2.0)),
+                                    Text(
+                                      '52 rue de coubertin',
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 15.0,
+                                        color: Colors.black54,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    'En lieu et place de la Pomponnette, en plein de cœur de Montmartre, voici Bibiche. Une jolie cuisine bistronomique et un menu qui change selon le marché et les envies du Chef. Le décor offre une atmosphère vintage décalée et rock, à l\'image de l\'équipe aussi cool que professionnelle ! C\'est la seconde affaire parisienne des deux maîtres des lieux qui ont déjà fait leurs preuves à La Maison (dans le 17ème) et qui souhaitent ici, proposer un lieu plus décontracté',
-                                    maxLines: 4,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                      color: Colors.black87,
+                                  ],
+                                ),
+                              ]
+                            ),
+                            Divider(),
+                            Row(
+                              children:[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  //mainAxisAlignment: MainAxisAlignment.end,
+                                  children: const <Widget>[
+                                    Text(
+                                      'Lucas Gauvain',
+                                      style: TextStyle(
+                                        fontSize: 15.0,
+                                        color: Colors.black54,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
+                                    Text(
+                                      '2022/11/21 - 2022/11/23',
+                                      style: TextStyle(
+                                        fontSize: 15.0,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]
                             ),
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 mainAxisAlignment: MainAxisAlignment.end,
-                                children: const <Widget>[
-                                  Text(
-                                    'Lucas Gauvain',
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                      color: Colors.black54,
-                                    ),
+                                children:[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pushNamed(ParticipantConcoursPage.tag);
+                                    },
+                                    child: const Text('27 partipants'),
                                   ),
-                                  Text(
-                                    '2022/11/21 - 2022/11/23',
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                  TextButton(
+                                    onPressed: () {
+                                      _joinConcours();
+                                    },
+                                    child: const Text('Participer'),
+                                  )
+                                ]
+                              )
+                            )
                           ],
                         ),
                       ),
