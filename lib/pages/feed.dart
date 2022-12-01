@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:steack_a_cheval/pages/concours.dart';
 import 'package:steack_a_cheval/api/people_service.dart';
 import 'package:steack_a_cheval/models/People.dart';
 import 'package:steack_a_cheval/pages/profil.dart';
@@ -54,7 +55,12 @@ class _FeedPageState extends State<FeedPage> {
                     children: [
                       Icon(Icons.content_paste, color: primaryColor),
                       SizedBox(width: 12),
-                      Text("Concours"),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.of(context).pushNamed(ConcoursPage.tag);
+                        },
+                        child: Text('Concours'),
+                      ),
                     ],
                   ),
                 ),
