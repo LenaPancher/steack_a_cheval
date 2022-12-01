@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:steack_a_cheval/models/People.dart';
 
 import '../api/people_service.dart';
 import '../models/Cours.dart';
@@ -14,6 +16,20 @@ class CoursEquitation extends StatefulWidget {
 
 class _CoursEquitationState extends State<CoursEquitation> {
   PeopleService peopleService = PeopleService();
+  late People currentUser;
+  late List<Cours> coursList;
+
+  @override
+  initState() {
+    super.initState();
+    peopleService.currentUser().then((result) {
+      print("result: $result");
+      setState(() {
+        currentUser = result;
+      });
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -230,13 +246,16 @@ class _CoursEquitationState extends State<CoursEquitation> {
               padding: const EdgeInsets.only(left: 150.0, top: 40.0),
               child: ElevatedButton(
                 onPressed: () {
-                  final cours =
-                      Cours(60, DateTime.now(), "terrain", "discipline");
-                  _addCardWidget(cours);
-                  Navigator.of(context).pop();
-                  // if (_formKey.currentState!.validate()) {
+                  if (_formKey.currentState!.validate()) {
+                    var cours = Cours(60, DateTime.now(), "terrain",
+                        "discipline", currentUser.uid);
 
-                  // }
+                    _addCardWidget(cours);
+
+                    peopleService.insertCours(cours);
+
+                    Navigator.of(context).pop();
+                  }
                 },
                 child: const Text('Submit'),
               )),
