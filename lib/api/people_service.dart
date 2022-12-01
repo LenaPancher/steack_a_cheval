@@ -63,8 +63,16 @@ class PeopleService {
   Future updateProfile(People people) async {
     QuerySnapshot snapshot = await _db
         .collection('people')
-        .where("firebase_id", isEqualTo: FirebaseAuth.instance.currentUser?.uid).get();
+        .where("firebase_id", isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+        .get();
     var user = snapshot.docs[0].reference.update(people.toJson());
     print("USER === $user");
+  }
+
+  Future<String> getCurrentUserId() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      return FirebaseAuth.instance.currentUser!.uid;
+    }
+    throw SteakException(message: 'Impossible de trouver le user :(');
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:steack_a_cheval/pages/partiesPage.dart';
+import 'package:steack_a_cheval/pages/parties_page.dart';
 import 'package:steack_a_cheval/api/people_service.dart';
 import 'package:steack_a_cheval/models/People.dart';
 import 'package:steack_a_cheval/pages/profil.dart';

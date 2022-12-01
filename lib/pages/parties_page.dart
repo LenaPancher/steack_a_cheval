@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:steack_a_cheval/widgets/partyFormField.dart';
+import 'package:steack_a_cheval/api/party_service.dart';
+import 'package:steack_a_cheval/api/people_service.dart';
+import 'package:steack_a_cheval/widgets/party_form_field.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+
+import '../models/Party.dart';
 
 class PartiesPage extends StatefulWidget {
   static const tag = "parties";
@@ -16,6 +20,10 @@ class _PartiesPageState extends State<PartiesPage> {
   // Get global key
   final _formKey = GlobalKey<FormState>();
 
+  // Get services
+  final partyService = PartyService();
+  final peopleService = PeopleService();
+
   String partyType = "Apéro";
   List<String> eventTypeList = ["Apéro", "Repas"];
   DateTime selectedDate = DateTime.now();
@@ -24,6 +32,7 @@ class _PartiesPageState extends State<PartiesPage> {
   var _setDate;
   String? _hour, _minute, second;
   String finalTime = "";
+  late DateTime chosenDate;
 
   // Controllers
   late TextEditingController partyTypeController;
@@ -37,6 +46,7 @@ class _PartiesPageState extends State<PartiesPage> {
     initializeDateFormatting();
 
     partyTypeController = TextEditingController();
+    partyTypeController.text = "Apéro";
     partyCommentController = TextEditingController();
     dateController = TextEditingController();
     timeController = TextEditingController();
@@ -116,7 +126,10 @@ class _PartiesPageState extends State<PartiesPage> {
                             height: 50,
                             margin: EdgeInsets.only(top: 30),
                             alignment: Alignment.center,
-                            decoration: BoxDecoration(color: Colors.grey[100], borderRadius: const BorderRadius.all(Radius.circular(6)) ),
+                            decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(6))),
                             child: TextFormField(
                               style: TextStyle(fontSize: 18),
                               textAlign: TextAlign.center,
@@ -128,12 +141,13 @@ class _PartiesPageState extends State<PartiesPage> {
                               },
                               decoration: InputDecoration(
                                 disabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    width: 1.0
-                                  ),
-                                  borderRadius: const BorderRadius.all(Radius.circular(6))
-                                ),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        width: 1.0),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(6))),
                                 label: const Center(
                                   child: Text("Choisir une date"),
                                 ),
@@ -142,7 +156,6 @@ class _PartiesPageState extends State<PartiesPage> {
                             ),
                           ),
                         ),
-
                         InkWell(
                           onTap: () {
                             _selectTime(context);
@@ -152,7 +165,10 @@ class _PartiesPageState extends State<PartiesPage> {
                             height: 50,
                             margin: EdgeInsets.only(top: 30),
                             alignment: Alignment.center,
-                            decoration: BoxDecoration(color: Colors.grey[100], borderRadius: const BorderRadius.all(Radius.circular(6)) ),
+                            decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(6))),
                             child: TextFormField(
                               style: TextStyle(fontSize: 18),
                               textAlign: TextAlign.center,
@@ -165,11 +181,12 @@ class _PartiesPageState extends State<PartiesPage> {
                               decoration: InputDecoration(
                                 disabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                        color: Theme.of(context).colorScheme.primary,
-                                        width: 1.0
-                                    ),
-                                    borderRadius: const BorderRadius.all(Radius.circular(6))
-                                ),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        width: 1.0),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(6))),
                                 label: const Center(
                                   child: Text("Choisir une heure"),
                                 ),
@@ -204,6 +221,7 @@ class _PartiesPageState extends State<PartiesPage> {
                 ),
                 child: const Text('Ajouter'),
                 onPressed: () {
+                  handlePartyForm();
 
                 },
               ),
@@ -233,6 +251,8 @@ class _PartiesPageState extends State<PartiesPage> {
     if (picked != null) {
       setState(() {
         selectedDate = picked;
+        chosenDate = DateTime(selectedDate.year, selectedDate.month,
+            selectedDate.day, selectedTime.hour, selectedTime.minute);
         dateController.text = DateFormat.yMd("fr_FR").format(selectedDate);
       });
     }
@@ -241,7 +261,6 @@ class _PartiesPageState extends State<PartiesPage> {
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-
       initialTime: selectedTime,
     );
     if (picked != null) {
@@ -251,10 +270,17 @@ class _PartiesPageState extends State<PartiesPage> {
         _minute = selectedTime.minute.toString();
         finalTime = _hour! + ' : ' + _minute!;
         timeController.text = finalTime;
-        DateTime chosenDate = DateTime(2023, 01, 01, selectedTime.hour, selectedTime.minute);
+        chosenDate = DateTime(selectedDate.year, selectedDate.month,
+            selectedDate.day, selectedTime.hour, selectedTime.minute);
 
-            timeController.text = DateFormat.jm("fr_FR").format(chosenDate);
+        timeController.text = DateFormat.jm("fr_FR").format(chosenDate);
       });
-    }}
+    }
+  }
 
+  Future<void> handlePartyForm() async {
+    var userId = await peopleService.getCurrentUserId();
+    Party party = Party(userId, partyCommentController.text, partyTypeController.text, chosenDate, []);
+    partyService.insertParty(party);
+  }
 }

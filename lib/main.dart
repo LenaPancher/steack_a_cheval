@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:steack_a_cheval/pages/feed.dart';
 import 'package:steack_a_cheval/pages/login.dart';
-import 'package:steack_a_cheval/pages/partiesPage.dart';
+import 'package:steack_a_cheval/pages/parties_page.dart';
 import 'package:steack_a_cheval/pages/profil.dart';
 import 'package:steack_a_cheval/pages/sign_up.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -44,10 +44,10 @@ class MyApp extends StatelessWidget {
         )
       ),
       localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('en'),
         Locale('fr')
       ],
       home: const LoginPage(),
