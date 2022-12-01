@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:steack_a_cheval/pages/feed.dart';
 import 'package:steack_a_cheval/pages/login.dart';
 import 'package:steack_a_cheval/pages/partiesPage.dart';
+import 'package:steack_a_cheval/pages/profil.dart';
 import 'package:steack_a_cheval/pages/sign_up.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         LoginPage.tag:(context) => const LoginPage(),
         SignUpPage.tag: (context) => const SignUpPage(),
         FeedPage.tag: (context) => const FeedPage(),
+        ProfilPage.tag: (context) => const ProfilPage(),
         PartiesPage.tag: (context) => const PartiesPage(),
       },
       debugShowCheckedModeBanner: false,

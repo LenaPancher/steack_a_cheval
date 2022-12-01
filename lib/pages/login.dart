@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:steack_a_cheval/api/exceptions.dart';
 import 'package:steack_a_cheval/pages/feed.dart';
 import 'package:steack_a_cheval/pages/sign_up.dart';
 
@@ -20,9 +22,12 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  String errorText = "";
 
   @override
   void initState() {
+    emailController.text = "test@test.com";
+    passwordController.text = "lenapancher";
     super.initState();
   }
 
@@ -118,18 +123,10 @@ class _LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 40, bottom: 20),
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 // Check authentification
-                                peopleService.signIn(emailController.text, passwordController.text);
-                                // TODO
-                                // Handle errors here or create a service for handling auth errors
-
-                                // If no errors, push to feed page
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const FeedPage()),);
-
-                                emailController.text = "";
-                                passwordController.text = "";
+                                await signIn();
                               }
                             },
                             child: const Text("Se connecter"),
@@ -161,7 +158,16 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(errorText, style: const TextStyle(color: Colors.red),),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -170,6 +176,19 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  Future<void> signIn() async {
+    try {
+      await peopleService.signIn(emailController.text, passwordController.text);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const FeedPage()),);
+      emailController.text = "";
+      passwordController.text = "";
+    } on SteakException catch (e) {
+      setState(() {
+        errorText = e.message;
+      });
+    }
   }
 
 }

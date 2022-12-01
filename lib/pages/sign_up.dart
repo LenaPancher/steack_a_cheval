@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:steack_a_cheval/api/exceptions.dart';
 import 'package:steack_a_cheval/api/people_service.dart';
 import 'package:steack_a_cheval/models/People.dart';
 
@@ -21,6 +22,7 @@ class _SignUpPageState extends State<SignUpPage> {
   bool obscureText = true;
   XFile? profilePicture;
   PeopleService peopleService = PeopleService();
+  String errorText = "";
 
   TextEditingController pseudoController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -129,14 +131,19 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        People people = People(pseudo: pseudoController.text, password: passwordController.text, email: emailController.text);
-                        peopleService.signUp(people);
-                          print('inscription ok');
-                          print(peopleService);
-                          Navigator.of(context).pop();
+                        await signUp();
                       }
                     },
                     child: const Text("S'inscrire"),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(errorText, style: const TextStyle(color: Colors.red),),
+                    ],
                   ),
                 ),
               ],
@@ -145,6 +152,18 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+
+  Future<void> signUp() async {
+    try {
+      People people = People(pseudo: pseudoController.text, password: passwordController.text, email: emailController.text);
+      await peopleService.signUp(people);
+      Navigator.of(context).pop();
+    } on SteakException catch (e) {
+      setState(() {
+        errorText = e.message;
+      });
+    }
   }
 
   void uploadProfilePicture() async {
