@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:steack_a_cheval/pages/partiesPage.dart';
 
 class FeedPage extends StatefulWidget {
   static const tag = "feed";
@@ -82,6 +83,11 @@ class _FeedPageState extends State<FeedPage> {
                   break;
                 case 2:
                   // PUSH LA VUE SOIREES
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PartiesPage()),
+                  );
 
                   break;
               }
