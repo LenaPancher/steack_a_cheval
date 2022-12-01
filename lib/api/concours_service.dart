@@ -1,50 +1,39 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:steack_a_cheval/api/exceptions.dart';
 import 'package:steack_a_cheval/models/Concours.dart';
 
-class AddUser {
+class ConcourService {
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  CollectionReference concours_db = FirebaseFirestore.instance.collection('concours');
+  List<Concours> listConcours = [];
 
-  createConcours(Concours concours) async{
-    try{
-      await concours_db.add({
-        name: concours.name,
-        author: concours.author,
-        date: concours.date,
-        listpeople: concours.listpeople
-      });
-      print("new concours");
+  Future<List<Concours>> getConcours() async {
+    QuerySnapshot snapshot = await _db
+        .collection('concours')
+        .get();
 
-    } catch(e){
-      print(e);
+    for(var i = 0; i< snapshot.docs.length; i++){
+      final concoursJson = snapshot.docs[i].data() as Map<String, dynamic>;
+      Concours concours = Concours.fromJson(concoursJson);
+      listConcours.add(concours);
     }
+
+    return listConcours;
   }
 
-  listParticipants() async{
-      return FutureBuilder<DocumentSnapshot>(
-        future: users.doc(documentId).get(),
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+  Future<void> insertConcours(Concours concours) async {
 
-          if (snapshot.hasError) {
-            return Text("Something went wrong");
-          }
+    try {
+      await _db.collection("concours").add(concours.toJson());
 
-          if (snapshot.hasData && !snapshot.data!.exists) {
-            return Text("Document does not exist");
-          }
+    } on FirebaseAuthException catch (e) {
+      throw SteakException(message: "Problème d'insertion");
 
-          if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-            return Text("Full Name: ${data['full_name']} ${data['last_name']}");
-          }
-
-          return Text("loading");
-        },
-      );
     }
+  }
 
   }
 
