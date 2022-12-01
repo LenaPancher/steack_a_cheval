@@ -275,6 +275,7 @@ class _HorseProprietairePageState extends State<HorseProprietairePage> {
                   horse.sexe = sexeChoice;
                   horse.speciality = specialityChoice;
                   await horseService.updateHorse(horse);
+                  setState(() {});
                   Navigator.of(context).pop();
                 }
                 const snackBar = SnackBar(
