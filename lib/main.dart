@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:steack_a_cheval/pages/feed.dart';
+import 'package:steack_a_cheval/pages/horse.dart';
 import 'package:steack_a_cheval/pages/login.dart';
+import 'package:steack_a_cheval/pages/profil.dart';
 import 'package:steack_a_cheval/pages/sign_up.dart';
 
 import 'firebase_options.dart';
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
         LoginPage.tag:(context) => const LoginPage(),
         SignUpPage.tag: (context) => const SignUpPage(),
         FeedPage.tag: (context) => const FeedPage(),
+        ProfilPage.tag: (context) => const ProfilPage(),
+        HorsePage.tag: (context) => const HorsePage(),
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
