@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:steack_a_cheval/api/people_service.dart';
 import 'package:steack_a_cheval/models/People.dart';
+import 'package:steack_a_cheval/pages/horse.dart';
 
 class ProfilPage extends StatefulWidget {
   static const tag = "profil";
@@ -44,6 +45,11 @@ class _ProfilState extends State<ProfilPage> {
       appBar: AppBar(
         title: const Text("Profil"),
         actions: [
+          IconButton(
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const HorsePage()),);
+              },
+              icon: const Icon(Icons.bedroom_baby)),
           IconButton(
               onPressed: () {
                 updateControllers();
