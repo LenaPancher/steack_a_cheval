@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../api/people_service.dart';
 import '../models/Cours.dart';
 
 class CoursEquitation extends StatefulWidget {
@@ -10,6 +11,8 @@ class CoursEquitation extends StatefulWidget {
 }
 
 class _CoursEquitationState extends State<CoursEquitation> {
+  PeopleService peopleService = PeopleService();
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -59,26 +62,88 @@ class _CoursEquitationState extends State<CoursEquitation> {
   }
 
   Widget _form() {
+    const List<int> durationList = <int>[30, 60];
+    const List<String> terrainList = <String>["Carrière", "Manège"];
+    const List<String> disciplineList = <String>[
+      "Dressage",
+      "Saut d’obstacle",
+      "Endurance"
+    ];
+
+    int durationValue = durationList.first;
+    String terrainValue = terrainList.first;
+    String disciplineValue = disciplineList.first;
+
     return Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          TextFormField(
-            controller: nameController,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.person),
-              hintText: 'Enter your name',
-              labelText: 'Name',
+          DropdownButton<String>(
+            value: disciplineValue,
+            icon: const Icon(Icons.arrow_downward),
+            elevation: 16,
+            style: const TextStyle(color: Colors.deepPurple),
+            underline: Container(
+              height: 2,
+              color: Colors.deepPurpleAccent,
             ),
+            onChanged: (String? value) {
+              // This is called when the user selects an item.
+              setState(() {
+                disciplineValue = value!;
+              });
+            },
+            items: disciplineList.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
           ),
-          TextFormField(
-            controller: mailController,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.mail),
-              hintText: 'Enter a email',
-              labelText: 'Email',
+          DropdownButton<String>(
+            value: terrainValue,
+            icon: const Icon(Icons.arrow_downward),
+            elevation: 16,
+            style: const TextStyle(color: Colors.deepPurple),
+            underline: Container(
+              height: 2,
+              color: Colors.deepPurpleAccent,
             ),
+            onChanged: (String? value) {
+              // This is called when the user selects an item.
+              setState(() {
+                terrainValue = value!;
+              });
+            },
+            items: terrainList.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+          DropdownButton<int>(
+            value: durationValue,
+            icon: const Icon(Icons.arrow_downward),
+            elevation: 16,
+            style: const TextStyle(color: Colors.deepPurple),
+            underline: Container(
+              height: 2,
+              color: Colors.deepPurpleAccent,
+            ),
+            onChanged: (int? value) {
+              // This is called when the user selects an item.
+              setState(() {
+                durationValue = value!;
+              });
+            },
+            items: durationList.map<DropdownMenuItem<int>>((int value) {
+              return DropdownMenuItem<int>(
+                value: value,
+                child: Text("$value minutes"),
+              );
+            }).toList(),
           ),
           Container(
               padding: const EdgeInsets.only(left: 150.0, top: 40.0),
@@ -94,6 +159,15 @@ class _CoursEquitationState extends State<CoursEquitation> {
                 },
                 child: const Text('Submit'),
               )),
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: Theme.of(context).textTheme.labelLarge,
+            ),
+            child: const Text('Disable'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ],
       ),
     );
@@ -168,28 +242,8 @@ class _CoursEquitationState extends State<CoursEquitation> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Basic dialog title'),
+          title: const Text('Participer à un cours'),
           content: _form(),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Disable'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Enable'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
         );
       },
     );
