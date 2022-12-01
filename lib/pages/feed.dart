@@ -3,6 +3,7 @@ import 'package:steack_a_cheval/pages/concours.dart';
 import 'package:steack_a_cheval/api/people_service.dart';
 import 'package:steack_a_cheval/models/People.dart';
 import 'package:steack_a_cheval/pages/profil.dart';
+import 'package:steack_a_cheval/pages/cours.dart';
 
 class FeedPage extends StatefulWidget {
   static const tag = "feed";
@@ -95,7 +96,11 @@ class _FeedPageState extends State<FeedPage> {
                   break;
                 case 1:
                   // PUSH LA VUE COURS
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CoursEquitation()),
+                  );
                   break;
                 case 2:
                   // PUSH LA VUE SOIREES
