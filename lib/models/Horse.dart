@@ -6,6 +6,7 @@ class Horse {
   String race;
   String speciality;
   String userId;
+  String horseId;
 
   Horse({
     this.name = "",
@@ -15,6 +16,7 @@ class Horse {
     this.race = "",
     this.speciality = "",
     this.userId = "",
+    this.horseId = "",
   });
 
   Horse.fromJson(Map<String, dynamic> json)
@@ -24,7 +26,8 @@ class Horse {
         robe = json['robe'],
         race = json['race'],
         speciality = json['speciality'],
-        userId = json['user_id'];
+        userId = json['user_id'],
+        horseId = json['horse_id'];
 
   Map<String, dynamic> toJson() => {
     'name': name,
@@ -34,5 +37,6 @@ class Horse {
     'race': race,
     'speciality': speciality,
     'user_id': userId,
+    'horse_id': horseId,
   };
 }
