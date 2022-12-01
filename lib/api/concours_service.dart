@@ -1,18 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:steack_a_cheval/models/Concours.dart';
 
 class AddUser {
 
   CollectionReference concours_db = FirebaseFirestore.instance.collection('concours');
 
-  createConcours(String name, String author, DateTime date, List<String> listpeople) async{
+  createConcours(Concours concours) async{
     try{
       await concours_db.add({
-        name: name,
-        author: author,
-        date: date,
-        listpeople:listpeople
+        name: concours.name,
+        author: concours.author,
+        date: concours.date,
+        listpeople: concours.listpeople
       });
       print("new concours");
 
