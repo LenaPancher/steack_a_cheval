@@ -4,12 +4,14 @@ class Concours {
   String adress;
   String date;
   List<String> listPeople;
+  String userId;
 
   Concours({
     this.name = "",
     this.author = "",
     this.adress = "",
     this.date = "",
+    this.userId = "",
     this.listPeople = const <String>[],
   });
 

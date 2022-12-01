@@ -50,10 +50,10 @@ class _ConcoursPage extends State<ConcoursPage> {
     dateConcoursController.dispose();
   }
 
-  TextEditingController nameConcourController = TextEditingController();
-  TextEditingController adresseConcoursController = TextEditingController();
-  TextEditingController authorConcoursController = TextEditingController();
-  TextEditingController dateConcoursController = TextEditingController();
+  // TextEditingController nameConcourController = TextEditingController();
+  // TextEditingController adresseConcoursController = TextEditingController();
+  // TextEditingController authorConcoursController = TextEditingController();
+  // TextEditingController dateConcoursController = TextEditingController();
 
 
   final _formKey = GlobalKey<FormState>();
