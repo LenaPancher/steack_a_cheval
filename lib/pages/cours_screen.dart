@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../api/people_service.dart';
 import '../models/Cours.dart';
+import 'package:intl/intl.dart';
+import 'dart:ui' as ui;
 
 class CoursEquitation extends StatefulWidget {
   const CoursEquitation({super.key});
@@ -50,8 +52,17 @@ class _CoursEquitationState extends State<CoursEquitation> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+
+  var _setDate;
+  String? _hour, _minute, second;
+  String finalTime = "";
+
   final nameController = TextEditingController();
   final mailController = TextEditingController();
+  final dateController = TextEditingController();
+  final timeController = TextEditingController();
 
   @override
   void dispose() {
@@ -145,6 +156,76 @@ class _CoursEquitationState extends State<CoursEquitation> {
               );
             }).toList(),
           ),
+          InkWell(
+            onTap: () {
+              _selectDate(context);
+            },
+            child: Container(
+              width: 200,
+              height: 50,
+              margin: EdgeInsets.only(top: 30),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: const BorderRadius.all(Radius.circular(6))),
+              child: TextFormField(
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+                enabled: false,
+                keyboardType: TextInputType.text,
+                controller: dateController,
+                onSaved: (String? val) {
+                  _setDate = val;
+                },
+                decoration: InputDecoration(
+                  disabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 1.0),
+                      borderRadius: const BorderRadius.all(Radius.circular(6))),
+                  label: const Center(
+                    child: Text("Choisir une date"),
+                  ),
+                  contentPadding: const EdgeInsets.only(top: 0.0),
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              _selectTime(context);
+            },
+            child: Container(
+              width: 200,
+              height: 50,
+              margin: EdgeInsets.only(top: 30),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: const BorderRadius.all(Radius.circular(6))),
+              child: TextFormField(
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+                enabled: false,
+                keyboardType: TextInputType.text,
+                controller: timeController,
+                onSaved: (String? val) {
+                  _setDate = val;
+                },
+                decoration: InputDecoration(
+                  disabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 1.0),
+                      borderRadius: const BorderRadius.all(Radius.circular(6))),
+                  label: const Center(
+                    child: Text("Choisir une heure"),
+                  ),
+                  contentPadding: const EdgeInsets.only(top: 0.0),
+                ),
+              ),
+            ),
+          ),
           Container(
               padding: const EdgeInsets.only(left: 150.0, top: 40.0),
               child: ElevatedButton(
@@ -223,7 +304,7 @@ class _CoursEquitationState extends State<CoursEquitation> {
                     ),
                     Icon(
                       Icons.handshake,
-                      textDirection: TextDirection.rtl,
+                      textDirection: ui.TextDirection.rtl,
                       size: 20,
                       color: Colors.grey,
                     )
@@ -247,5 +328,41 @@ class _CoursEquitationState extends State<CoursEquitation> {
         );
       },
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        locale: const Locale("fr", "FR"),
+        initialDate: selectedDate,
+        initialDatePickerMode: DatePickerMode.day,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2024));
+    if (picked != null) {
+      setState(() {
+        selectedDate = picked;
+        dateController.text = DateFormat.yMd("fr_FR").format(selectedDate);
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null) {
+      setState(() {
+        selectedTime = picked;
+        _hour = selectedTime.hour.toString();
+        _minute = selectedTime.minute.toString();
+        finalTime = _hour! + ' : ' + _minute!;
+        timeController.text = finalTime;
+        DateTime chosenDate =
+            DateTime(2023, 01, 01, selectedTime.hour, selectedTime.minute);
+
+        timeController.text = DateFormat.jm("fr_FR").format(chosenDate);
+      });
+    }
   }
 }
