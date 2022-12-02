@@ -68,7 +68,7 @@ class FeedService{
 
     for (var i = 0; i < snapshot.docs.length; i++) {
       final partiesJson = snapshot.docs[i].data() as Map<String, dynamic>;
-      Party parties = Party.fromJson(partiesJson);
+      Party parties = Party.fromJson(partiesJson, snapshot.docs[i].reference.id);
       print(parties);
       listParties.add(parties);
     }
