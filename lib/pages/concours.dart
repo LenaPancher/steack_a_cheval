@@ -65,19 +65,12 @@ class _ConcoursPage extends State<ConcoursPage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Concours"),
-          actions: [
-            Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    createConcours(context);
-                  },
-                  child: const Icon(
-                    Icons.add,
-                    size: 26.0,
-                  ),
-                )),
-          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => createConcours(context),
+          tooltip: 'Add',
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          child: const Icon(Icons.add),
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: _concoursStream,

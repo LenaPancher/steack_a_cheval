@@ -74,13 +74,12 @@ class _PartiesPageState extends State<PartiesPage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Soirées"),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  _dialogBuilder(context);
-                },
-                icon: const Icon(Icons.add)),
-          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _dialogBuilder(context),
+          tooltip: 'Add',
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          child: const Icon(Icons.add),
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: _partyStream,
@@ -119,124 +118,131 @@ class _PartiesPageState extends State<PartiesPage> {
             builder: (BuildContext context, StateSetter setState) {
           return AlertDialog(
             title: const Text('Créer une soirée'),
-            content: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 275,
-                          child: DropdownButton(
-                              value: partyType,
-                              items: eventTypeList
-                                  .map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (String? value) {
-                                setState(() {
-                                  partyType = value!;
-                                });
-                              },
-                              iconEnabledColor:
-                                  Theme.of(context).colorScheme.primary,
-                              icon: const Icon(Icons.arrow_downward)),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            _selectDate(context);
-                          },
-                          child: Container(
-                            width: 200,
-                            height: 50,
-                            margin: EdgeInsets.only(top: 30),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(6))),
-                            child: TextFormField(
-                              style: TextStyle(fontSize: 18),
-                              textAlign: TextAlign.center,
-                              enabled: false,
-                              keyboardType: TextInputType.text,
-                              controller: dateController,
-                              onSaved: (String? val) {
-                                _setDate = val;
-                              },
-                              decoration: InputDecoration(
-                                disabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        width: 1.0),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(6))),
-                                label: const Center(
-                                  child: Text("Choisir une date"),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: DropdownButton(
+                                isExpanded: true,
+                                value: partyType,
+                                underline: Container(
+                                  height: 2,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
-                                contentPadding: const EdgeInsets.only(top: 0.0),
+                                items: eventTypeList
+                                    .map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    partyType = value!;
+                                  });
+                                },
+                                iconEnabledColor:
+                                    Theme.of(context).colorScheme.primary,
+                                icon: const Icon(Icons.arrow_downward)),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              _selectDate(context);
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              margin: EdgeInsets.only(top: 30),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius:
+                                      const BorderRadius.all(Radius.circular(6))),
+                              child: TextFormField(
+                                style: TextStyle(fontSize: 18),
+                                textAlign: TextAlign.center,
+                                enabled: false,
+                                keyboardType: TextInputType.text,
+                                controller: dateController,
+                                onSaved: (String? val) {
+                                  _setDate = val;
+                                },
+                                decoration: InputDecoration(
+                                  disabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          width: 1.0),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(6))),
+                                  label: const Center(
+                                    child: Text("Choisir une date"),
+                                  ),
+                                  contentPadding: const EdgeInsets.only(top: 0.0),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            _selectTime(context);
-                          },
-                          child: Container(
-                            width: 200,
-                            height: 50,
-                            margin: EdgeInsets.only(top: 30),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(6))),
-                            child: TextFormField(
-                              style: TextStyle(fontSize: 18),
-                              textAlign: TextAlign.center,
-                              enabled: false,
-                              keyboardType: TextInputType.text,
-                              controller: timeController,
-                              onSaved: (String? val) {
-                                _setDate = val;
-                              },
-                              decoration: InputDecoration(
-                                disabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        width: 1.0),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(6))),
-                                label: const Center(
-                                  child: Text("Choisir une heure"),
+                          InkWell(
+                            onTap: () {
+                              _selectTime(context);
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              margin: EdgeInsets.only(top: 30),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius:
+                                      const BorderRadius.all(Radius.circular(6))),
+                              child: TextFormField(
+                                style: TextStyle(fontSize: 18),
+                                textAlign: TextAlign.center,
+                                enabled: false,
+                                keyboardType: TextInputType.text,
+                                controller: timeController,
+                                onSaved: (String? val) {
+                                  _setDate = val;
+                                },
+                                decoration: InputDecoration(
+                                  disabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          width: 1.0),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(6))),
+                                  label: const Center(
+                                    child: Text("Choisir une heure"),
+                                  ),
+                                  contentPadding: const EdgeInsets.only(top: 0.0),
                                 ),
-                                contentPadding: const EdgeInsets.only(top: 0.0),
                               ),
                             ),
                           ),
-                        ),
-                        PartyFormField(
-                          spacing: 20,
-                          label: "Commentaires pour les invités",
-                          controller: partyCommentController,
-                          maxLines: 3,
-                        ),
-                      ],
-                    )),
-              ],
+                          PartyFormField(
+                            spacing: 20,
+                            label: "Commentaires pour les invités",
+                            controller: partyCommentController,
+                            maxLines: 3,
+                          ),
+                        ],
+                      )),
+                ],
+              ),
             ),
             actions: <Widget>[
               TextButton(
