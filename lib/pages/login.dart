@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:steack_a_cheval/api/exceptions.dart';
 import 'package:steack_a_cheval/pages/feed.dart';
+import 'package:steack_a_cheval/pages/forgot_password.dart';
 import 'package:steack_a_cheval/pages/sign_up.dart';
 
 import '../api/people_service.dart';
@@ -113,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                         text: "Mot de passe oublié ?",
                         recognizer: TapGestureRecognizer()
                           ..onTap = () async {
-                            //on tap code here, you can navigate to other page or URL
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),);
                           },
                       )),
                     ),

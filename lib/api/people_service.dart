@@ -71,6 +71,19 @@ class PeopleService {
     var user = snapshot.docs[0].reference.update(people.toJson());
   }
 
+  Future updatePassword(People people) async {
+    QuerySnapshot snapshot = await _db
+        .collection('people')
+        .where("email", isEqualTo: people.email)
+        .get();
+
+    print("COUUUUUU");
+    print(snapshot.docs);
+    print(snapshot.docs.length);
+
+    var user = snapshot.docs[0].reference.update(people.toJson());
+  }
+
   Future<List<People>> getAllParticipant(List<dynamic> idList) async {
     List<People> peopleList = [];
     if(idList.isEmpty){
@@ -96,4 +109,15 @@ class PeopleService {
     }
     throw SteakException(message: 'Impossible de trouver le user :(');
   }
+
+  Future resetPassword({required String email}) async {
+    await FirebaseAuth.instance
+        .sendPasswordResetEmail(email: email)
+        .then((value) {
+          return true;
+        })
+        .catchError((e) => false);
+  }
 }
+
+
