@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:steack_a_cheval/api/party_service.dart';
 import 'package:steack_a_cheval/api/people_service.dart';
+import 'package:steack_a_cheval/widgets/party_card_widget.dart';
 import 'package:steack_a_cheval/widgets/party_form_field.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:steack_a_cheval/widgets/party_list_widget.dart';
 
 import '../models/Party.dart';
 
@@ -20,9 +23,13 @@ class _PartiesPageState extends State<PartiesPage> {
   // Get global key
   final _formKey = GlobalKey<FormState>();
 
+  // Parties
+  late Future<List<Party>> partyList;
+
   // Get services
   final partyService = PartyService();
   final peopleService = PeopleService();
+
 
   String partyType = "Apéro";
   List<String> eventTypeList = ["Apéro", "Repas"];
@@ -35,7 +42,6 @@ class _PartiesPageState extends State<PartiesPage> {
   late DateTime chosenDate;
 
   // Controllers
-  late TextEditingController partyTypeController;
   late TextEditingController partyCommentController;
   late TextEditingController dateController;
   late TextEditingController timeController;
@@ -44,9 +50,8 @@ class _PartiesPageState extends State<PartiesPage> {
   void initState() {
     super.initState();
     initializeDateFormatting();
+    partyList = partyService.getAllParties();
 
-    partyTypeController = TextEditingController();
-    partyTypeController.text = "Apéro";
     partyCommentController = TextEditingController();
     dateController = TextEditingController();
     timeController = TextEditingController();
@@ -54,7 +59,6 @@ class _PartiesPageState extends State<PartiesPage> {
 
   @override
   void dispose() {
-    partyTypeController.dispose();
     partyCommentController.dispose();
     dateController.dispose();
     timeController.dispose();
@@ -64,17 +68,37 @@ class _PartiesPageState extends State<PartiesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Soirées"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                _dialogBuilder(context);
-              },
-              icon: const Icon(Icons.add)),
-        ],
-      ),
-      body: Column(),
+        appBar: AppBar(
+          title: const Text("Soirées"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  _dialogBuilder(context);
+                },
+                icon: const Icon(Icons.add)),
+          ],
+        ),
+        body: FutureBuilder<List<Party>>(
+          future: partyList,
+          builder: (context, snapshot){
+            if(snapshot.hasData){
+              List<Party> parties = snapshot.data!;
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: parties.length,
+                itemBuilder: (context, index){
+                  return PartyCard(party: parties[index]);
+                },
+              );
+            }
+            else if (snapshot.hasError){
+              return const Text("Erreur de récupération des soirées");
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        )
     );
   }
 
@@ -221,8 +245,16 @@ class _PartiesPageState extends State<PartiesPage> {
                 ),
                 child: const Text('Ajouter'),
                 onPressed: () {
-                  handlePartyForm();
-
+                  if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      //userList.add(new_user);
+                    });
+                    handlePartyForm();
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Soirée créée')),
+                    );
+                  }
                 },
               ),
             ],
@@ -230,14 +262,6 @@ class _PartiesPageState extends State<PartiesPage> {
         });
       },
     );
-  }
-
-  void dropdownCallback(String? selectedValue) {
-    if (selectedValue is String) {
-      setState(() {
-        partyType = selectedValue;
-      });
-    }
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -268,7 +292,7 @@ class _PartiesPageState extends State<PartiesPage> {
         selectedTime = picked;
         _hour = selectedTime.hour.toString();
         _minute = selectedTime.minute.toString();
-        finalTime = _hour! + ' : ' + _minute!;
+        finalTime = '${_hour!} : ${_minute!}';
         timeController.text = finalTime;
         chosenDate = DateTime(selectedDate.year, selectedDate.month,
             selectedDate.day, selectedTime.hour, selectedTime.minute);
@@ -280,7 +304,9 @@ class _PartiesPageState extends State<PartiesPage> {
 
   Future<void> handlePartyForm() async {
     var userId = await peopleService.getCurrentUserId();
-    Party party = Party(userId, partyCommentController.text, partyTypeController.text, chosenDate, []);
+    Party party = Party(userId, partyCommentController.text,
+        partyType, chosenDate, [], DateTime.now());
+
     partyService.insertParty(party);
   }
 }
