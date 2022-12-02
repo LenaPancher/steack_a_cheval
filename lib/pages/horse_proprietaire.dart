@@ -122,6 +122,21 @@ class _HorseProprietairePageState extends State<HorseProprietairePage> {
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                          width: 80,
+                          child: Image(
+                            image: NetworkImage(horse.urlImage),
+                            fit: BoxFit.cover,
+                          )
+                      ),
+                    ],
+                  ),
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,

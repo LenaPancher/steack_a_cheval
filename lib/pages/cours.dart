@@ -121,6 +121,8 @@ class _CoursEquitationState extends State<CoursEquitation> {
                 if (_formKey.currentState!.validate()) {
                   var cours = Cours(durationValue, finalDatetime, terrainValue, disciplineValue, currentUser.uid);
                   coursService.insertCours(cours);
+                  dateController.text = "";
+                  timeController.text = "";
                   Navigator.of(context).pop();
                 }
                 const snackBar = SnackBar(
@@ -353,6 +355,7 @@ class _CoursEquitationState extends State<CoursEquitation> {
     if (picked != null) {
       setState(() {
         selectedDate = picked;
+        dateController.text = DateFormat.yMd("fr_FR").format(selectedDate);
       });
     }
   }
@@ -374,7 +377,12 @@ class _CoursEquitationState extends State<CoursEquitation> {
           picked.minute,
         );
 
+        var _hour = selectedTime.hour.toString();
+        var _minute = selectedTime.minute.toString();
+        var finalTime = '$_hour : $_minute';
+
         finalDatetime = dateTimeChosen;
+        timeController.text = finalTime;
       });
     }
   }
