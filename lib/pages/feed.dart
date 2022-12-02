@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:steack_a_cheval/pages/concours.dart';
 import 'package:steack_a_cheval/pages/parties_page.dart';
 import 'package:steack_a_cheval/api/people_service.dart';
 import 'package:steack_a_cheval/models/People.dart';
 import 'package:steack_a_cheval/pages/profil.dart';
+import 'package:steack_a_cheval/pages/cours.dart';
 
 class FeedPage extends StatefulWidget {
   static const tag = "feed";
@@ -55,7 +57,7 @@ class _FeedPageState extends State<FeedPage> {
                     children: [
                       Icon(Icons.content_paste, color: primaryColor),
                       SizedBox(width: 12),
-                      Text("Concours"),
+                      Text('Concours')
                     ],
                   ),
                 ),
@@ -86,11 +88,19 @@ class _FeedPageState extends State<FeedPage> {
               switch (value) {
                 case 0:
                   // PUSH LA VUE CONCOURS
-
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ConcoursPage())
+                  );
                   break;
                 case 1:
                   // PUSH LA VUE COURS
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CoursEquitation()),
+                  );
                   break;
                 case 2:
                   // PUSH LA VUE SOIREES

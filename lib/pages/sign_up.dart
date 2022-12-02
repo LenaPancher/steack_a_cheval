@@ -61,10 +61,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       uploadProfilePicture();
                     },
                     child: profilePicture == null
-                        ? const CircleAvatar(
+                        ? CircleAvatar(
                             radius: 60,
-                            backgroundColor: Color(0xFFA73322),
-                            child: Icon(
+                            backgroundColor: Theme.of(context).colorScheme.primary,
+                            child: const Icon(
                               Icons.person,
                               color: Colors.white,
                               size: 80,

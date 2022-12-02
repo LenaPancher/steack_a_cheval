@@ -1,9 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:steack_a_cheval/api/people_service.dart';
 import 'package:steack_a_cheval/models/People.dart';
+import 'package:steack_a_cheval/pages/horse_dp.dart';
+import 'package:steack_a_cheval/pages/horse_proprietaire.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilPage extends StatefulWidget {
   static const tag = "profil";
@@ -46,6 +50,24 @@ class _ProfilState extends State<ProfilPage> {
         actions: [
           IconButton(
               onPressed: () {
+                print("PEOPLE TYPE = ${people?.type}");
+                (people?.type == "Propriétaire")
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                HorseProprietairePage(currentPeople: people!)),
+                      )
+                    : Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                HorseDpPage(currentPeople: people!)),
+                      );
+              },
+              icon: const Icon(Icons.bedroom_baby)),
+          IconButton(
+              onPressed: () {
                 updateControllers();
                 setState(() {
                   edit = !edit;
@@ -84,10 +106,10 @@ class _ProfilState extends State<ProfilPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 profilePicture == null
-                    ? const CircleAvatar(
+                    ? CircleAvatar(
                         radius: 60,
-                        backgroundColor: Color(0xFFA73322),
-                        child: Icon(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        child: const Icon(
                           Icons.person,
                           color: Colors.white,
                           size: 80,
@@ -123,19 +145,34 @@ class _ProfilState extends State<ProfilPage> {
                 ),
               ],
             ),
-            infos(
-                icon: Icons.cake,
-                text: (people!.age.isEmpty) ? "Non renseigné" : people!.age),
+            infos(icon: Icons.cake, text: (people!.age.isEmpty) ? "Non renseigné" : people!.age),
             infos(icon: Icons.alternate_email, text: people!.email),
-            infos(
-                icon: Icons.phone,
-                text:
-                    (people!.phone.isEmpty) ? "Non renseigné" : people!.phone),
-            infos(
-                icon: Icons.link,
-                text: (people!.linkFFEProfil.isEmpty)
-                    ? "Non renseigné"
-                    : people!.linkFFEProfil),
+            infos(icon: Icons.phone, text: (people!.phone.isEmpty) ? "Non renseigné" : people!.phone),
+            (people!.linkFFEProfil.isEmpty) ?
+            infos(icon: Icons.link, text: "Non renseigné",)
+            : Row(
+              children: [
+                Icon(Icons.link),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Text.rich(
+                    TextSpan(
+                        style: const TextStyle(decoration: TextDecoration.underline),
+                        //make link blue and underline
+                        text: people!.linkFFEProfil,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () async {
+                            if (await canLaunchUrl(Uri.parse(people!.linkFFEProfil))) {
+                              await launchUrl(Uri.parse(people!.linkFFEProfil));
+                            } else {
+                              throw "Could not launch ${people!.linkFFEProfil}";
+                            }
+                          }
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -168,10 +205,10 @@ class _ProfilState extends State<ProfilPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 profilePicture == null
-                    ? const CircleAvatar(
+                    ? CircleAvatar(
                         radius: 60,
-                        backgroundColor: Color(0xFFA73322),
-                        child: Icon(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        child: const Icon(
                           Icons.person,
                           color: Colors.white,
                           size: 80,
@@ -201,8 +238,14 @@ class _ProfilState extends State<ProfilPage> {
                 ),
               ],
             ),
-            infosEdit(icon: Icons.cake, controller: ageController, type: TextInputType.number),
-            infosEdit(icon: Icons.phone, controller: phoneController, type: TextInputType.number),
+            infosEdit(
+                icon: Icons.cake,
+                controller: ageController,
+                type: TextInputType.number),
+            infosEdit(
+                icon: Icons.phone,
+                controller: phoneController,
+                type: TextInputType.number),
             infosEdit(icon: Icons.link, controller: linkController),
             Center(
                 child: ElevatedButton(
@@ -225,7 +268,10 @@ class _ProfilState extends State<ProfilPage> {
     );
   }
 
-  Row infosEdit({required IconData icon, required TextEditingController controller, TextInputType type = TextInputType.text}) {
+  Row infosEdit(
+      {required IconData icon,
+      required TextEditingController controller,
+      TextInputType type = TextInputType.text}) {
     return Row(
       children: [
         Icon(icon),
@@ -253,7 +299,7 @@ class _ProfilState extends State<ProfilPage> {
           contentPadding: const EdgeInsets.only(left: 0.0, right: 0.0),
           title: Text(type[i]),
           leading: Radio<String>(
-            activeColor: const Color(0xFFA73322),
+            activeColor: Theme.of(context).colorScheme.primary,
             value: type[i],
             groupValue: typeChoice,
             onChanged: (newValue) {
@@ -266,7 +312,7 @@ class _ProfilState extends State<ProfilPage> {
       );
       widget.add(sizedBox);
     }
-    return Column (
+    return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: widget,

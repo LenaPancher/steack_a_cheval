@@ -1,4 +1,5 @@
-class SteakException implements Exception {
-  final String message;
+class SteakException implements Exception{
+  String message;
+
   SteakException({required this.message});
 }
