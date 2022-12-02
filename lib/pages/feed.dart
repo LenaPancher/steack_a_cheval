@@ -208,12 +208,6 @@ class _FeedPageState extends State<FeedPage> {
                   return const Center(child: CircularProgressIndicator());
                 }),
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Divider(
-                thickness: 1,
-              ),
-            ),
-            const Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Text(
                 "Nouveaux cours",
@@ -238,12 +232,6 @@ class _FeedPageState extends State<FeedPage> {
                   }
                   return const Center(child: CircularProgressIndicator());
                 }),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Divider(
-                thickness: 1,
-              ),
-            ),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Text(
@@ -270,12 +258,6 @@ class _FeedPageState extends State<FeedPage> {
                   return const Center(child: CircularProgressIndicator());
                 }),
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Divider(
-                thickness: 1,
-              ),
-            ),
-            const Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Text(
                 "Nouvelles soirées",
@@ -300,12 +282,6 @@ class _FeedPageState extends State<FeedPage> {
                   }
                   return const Center(child: CircularProgressIndicator());
                 }),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Divider(
-                thickness: 1,
-              ),
-            ),
           ],
         ),
       ),
