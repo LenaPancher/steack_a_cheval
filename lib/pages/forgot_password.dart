@@ -86,7 +86,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   ElevatedButton(
                     onPressed: () async {
                       await peopleService.resetPassword(email:emailController.text);
-                      
+
                     },
                     child: const Text("Valider"),
                   ),
