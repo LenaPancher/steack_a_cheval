@@ -14,6 +14,7 @@ class PartyService {
   Future<void> insertParty(Party party) async {
     try {
       await _db.collection("parties").add(party.toJson());
+
     } on FirebaseAuthException catch (e) {
       throw SteakException(message: "Problème d'insertion");
     }
@@ -22,11 +23,23 @@ class PartyService {
   Future<List<Party>> getAllParties() async {
     QuerySnapshot snapshot = await _db.collection('parties').orderBy("createdAt", descending: true).get();
 
+
     for (var i = 0; i < snapshot.docs.length; i++) {
       final partyJson = snapshot.docs[i].data() as Map<String, dynamic>;
-      Party party = Party.fromJson(partyJson);
+      Party party = Party.fromJson(partyJson, snapshot.docs[i].reference.id);
       partyList.add(party);
     }
     return partyList;
+  }
+
+  addParticipant(userId, docId) async {
+    try {
+      await _db.collection("parties").doc(docId).get();
+      _db.collection("parties").doc(docId).update({"participants": FieldValue.arrayUnion([userId])});
+
+
+    } on FirebaseAuthException catch (e) {
+      throw SteakException(message: "Problème d'ajout de participants");
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Party{
+  String uid;
   String ownerId;
   String ownerComment;
   String type;
@@ -8,10 +9,11 @@ class Party{
   List<dynamic>participants;
   DateTime createdAt;
 
-  Party(this.ownerId, this.ownerComment, this.type, this.eventDate, this.participants, this.createdAt);
+  Party(this.uid, this.ownerId, this.ownerComment, this.type, this.eventDate, this.participants, this.createdAt);
 
-  Party.fromJson(Map<String, dynamic> json)
+  Party.fromJson(Map<String, dynamic> json, String uid)
       : ownerId = json['owner'],
+        uid = uid,
         ownerComment = json['ownerComment'],
         type = json['type'],
         eventDate = (json['eventDate'] as Timestamp).toDate(),

@@ -96,7 +96,7 @@ class _PartiesPageState extends State<PartiesPage> {
             return ListView(
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
               Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-              Party party = Party.fromJson(data);
+              Party party = Party.fromJson(data, document.reference.id);
               return PartyCard(party: party);
               }).toList(),
             );
@@ -312,8 +312,8 @@ class _PartiesPageState extends State<PartiesPage> {
 
   Future<void> handlePartyForm() async {
     var userId = await peopleService.getCurrentUserId();
-    Party party = Party(userId, partyCommentController.text,
-        partyType, chosenDate, [], DateTime.now());
+    Party party = Party("", userId, partyCommentController.text,
+        partyType, chosenDate, [userId], DateTime.now());
     partyService.insertParty(party);
     //partyList = appendElements(partyList, party);
 

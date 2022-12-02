@@ -304,7 +304,7 @@ class _CoursEquitationState extends State<CoursEquitation> {
   Widget _card(Cours cours) {
     var size = MediaQuery.of(context).size;
     return SizedBox(
-      height: 80,
+      height: 90,
       width: size.width,
       child: Card(
         elevation: 1,

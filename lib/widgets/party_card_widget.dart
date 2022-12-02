@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:steack_a_cheval/api/party_service.dart';
+import 'package:steack_a_cheval/api/people_service.dart';
 import '../models/Party.dart';
 
 class PartyCard extends StatefulWidget {
@@ -14,11 +16,28 @@ class PartyCard extends StatefulWidget {
 }
 
 class _PartyCardState extends State<PartyCard> {
-  List<String> listAperoImage = ["apero.jpeg", "apero2.jpeg", "apero3.jpeg", "apero4.jpeg"];
-  List<String> listRepasImage = ["repas.jpeg", "repas2.jpeg", "repas3.jpeg", "repas4.jpeg"];
+  PeopleService peopleService = PeopleService();
+  PartyService partyService = PartyService();
+
+
+  List<String> listAperoImage = [
+    "apero.jpeg",
+    "apero2.jpeg",
+    "apero3.jpeg",
+    "apero4.jpeg"
+  ];
+  List<String> listRepasImage = [
+    "repas.jpeg",
+    "repas2.jpeg",
+    "repas3.jpeg",
+    "repas4.jpeg"
+  ];
+
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    var size = MediaQuery
+        .of(context)
+        .size;
 
     return Padding(
       padding: const EdgeInsets.only(left: 13.0, right: 13.0),
@@ -30,7 +49,7 @@ class _PartyCardState extends State<PartyCard> {
                 width: size.width,
                 height: size.height / 7,
                 child: Image(
-                    image: AssetImage(getImageFromPartyType()),
+                  image: AssetImage(getImageFromPartyType()),
                   fit: BoxFit.cover,
                 )
             ),
@@ -49,7 +68,8 @@ class _PartyCardState extends State<PartyCard> {
             child: Row(
               children: [
                 Text("Rendez-vous : "),
-                Text(DateFormat.yMd("fr_FR").add_jm().format(widget.party.eventDate))
+                Text(DateFormat.yMd("fr_FR").add_jm().format(
+                    widget.party.eventDate))
               ],
             ),
           ),
@@ -59,8 +79,42 @@ class _PartyCardState extends State<PartyCard> {
                 alignment: Alignment.centerLeft,
                 child: Text(widget.party.ownerComment)),
           ),
-          SizedBox(height: 20),
-          Divider(thickness: 1,)
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    Text("Participants : "),
+                    Text(widget.party.participants.length.toString())
+                  ],
+                )
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: FutureBuilder(
+              future: getCorrectParticipationButton(),
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
+                if(snapshot.hasData!){
+                  if(snapshot.data! == true){
+                    return TextButton(onPressed: () {
+                      participationFormHandling();
+                    },
+                        child: Text("S'inscrire !"));
+                  };
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 4.0),
+                    child: Text("Vous êtes inscrits"),
+                  );
+                }
+                return CircularProgressIndicator();
+
+              },
+
+            )
+          ),
+          Divider(thickness: 1)
 
 
         ],
@@ -68,12 +122,30 @@ class _PartyCardState extends State<PartyCard> {
     );
   }
 
-  String getImageFromPartyType(){
-    if(widget.party.type == "Apéro"){
+  String getImageFromPartyType() {
+    if (widget.party.type == "Apéro") {
       var random = Random().nextInt(listAperoImage.length);
       return "images/${listAperoImage[random]}";
     }
     var random = Random().nextInt(listRepasImage.length);
     return "images/${listRepasImage[random]}";
+  }
+
+  Future<bool> getCorrectParticipationButton() async {
+    var userId = await peopleService.getCurrentUserId();
+
+    if (widget.party.participants.contains(userId)) {
+      return false;
+    }
+    return true;
+
+    /*TextButton(onPressed: () {},
+        child: Text("S'inscrire !"));
+  }*/
+  }
+
+  participationFormHandling() async {
+    var userId = await peopleService.getCurrentUserId();
+    partyService.addParticipant(userId, widget.party.uid);
   }
 }
