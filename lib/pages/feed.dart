@@ -224,48 +224,7 @@ class _FeedPageState extends State<FeedPage> {
                       shrinkWrap: true,
                       itemCount: cours.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          height: 120,
-                          width: MediaQuery.of(context).size.width,
-                          child: Card(
-                            elevation: 1,
-                            color: Color(0xFFEDEDED),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            cours[index].discipline,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 17),
-                                          ),
-                                          Text(
-                                            cours[index].terrain,
-                                            style: const TextStyle(
-                                                fontStyle: FontStyle.italic),
-                                          ),
-                                        ],
-                                      ),
-                                      Text(DateFormat.yMd("fr_FR")
-                                          .format(cours[index].trainingDate)),
-                                      Text(cours[index].duration.toString()),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
+                        return _card(cours[index]);
                       },
                     );
                   } else if (snapshot.hasError) {
@@ -419,5 +378,65 @@ class _FeedPageState extends State<FeedPage> {
         ),
       ),
     );
+  }
+
+  Widget _card(Cours cours) {
+    var size = MediaQuery.of(context).size;
+    return SizedBox(
+      height: 90,
+      width: size.width,
+      child: Card(
+        elevation: 1,
+        color: const Color(0xFFEDEDED),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              getDisciplineImage(cours.discipline),
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          cours.discipline,
+                          style: const TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          " (${cours.terrain})",
+                          style: const TextStyle(fontStyle: FontStyle.italic),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      "${cours.duration.toString()} min",
+                    ),
+                    Text(
+                      DateFormat("dd/MM/yyyy").format(cours.trainingDate),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Image getDisciplineImage(String discipline) {
+    switch (discipline) {
+      case "Endurance":
+        return const Image(image: AssetImage("images/endurance.jpeg"));
+      case "Dressage":
+        return const Image(image: AssetImage("images/dressage.jpeg"));
+      default:
+        return const Image(image: AssetImage("images/sautobstacle.jpeg"));
+    }
   }
 }

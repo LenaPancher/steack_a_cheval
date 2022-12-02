@@ -101,7 +101,7 @@ class _PartiesPageState extends State<PartiesPage> {
               }).toList(),
             );
         },
-        )
+        ),
     );
   }
 
