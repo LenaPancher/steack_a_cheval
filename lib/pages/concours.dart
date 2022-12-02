@@ -44,11 +44,6 @@ class _ConcoursPage extends State<ConcoursPage> {
     dateConcoursController.dispose();
   }
 
-  // TextEditingController nameConcourController = TextEditingController();
-  // TextEditingController adresseConcoursController = TextEditingController();
-  // TextEditingController authorConcoursController = TextEditingController();
-  // TextEditingController dateConcoursController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
 
   void _joinConcours() {
@@ -56,15 +51,6 @@ class _ConcoursPage extends State<ConcoursPage> {
       print('ajout du participant');
     });
   }
-
-  //void updateControllers() {
-  //  if (listConcours != null) {
-  //  nameConcourController.text = listConcours.;
-  //authorConcoursController.text = listConcours!.author;
-  //dateConcoursController.text = listConcours!.date;
-  //adresseConcoursController.text = listConcours!.adress;
-  //}
-  //}
 
   final format = DateFormat("yyyy-MM-dd");
 
@@ -171,7 +157,7 @@ class _ConcoursPage extends State<ConcoursPage> {
                             ),
                           ),
                           Text(
-                            concours.date.day.toString(),
+                            DateFormat.yMd("fr_FR").format(concours.date),
                             style: const TextStyle(
                               fontSize: 15.0,
                               color: Colors.black54,
@@ -187,10 +173,10 @@ class _ConcoursPage extends State<ConcoursPage> {
                             children: [
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context)
-                                  .pushNamed(ParticipantConcoursPage.tag);
+                              List<dynamic> list = concours.listPeople;
+                              Navigator.push(context,MaterialPageRoute(builder: (context) =>ParticipantConcoursPage(listParticipant: list)));
                             },
-                            child: const Text('X partipants'),
+                            child: Text('${concours.listPeople.length} partipants'),
                           ),
                           TextButton(
                             onPressed: () {

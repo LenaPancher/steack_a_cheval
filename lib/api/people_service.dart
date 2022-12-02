@@ -68,6 +68,24 @@ class PeopleService {
         .collection('people')
         .where("firebase_id", isEqualTo: FirebaseAuth.instance.currentUser?.uid).get();
     var user = snapshot.docs[0].reference.update(people.toJson());
-    print("USER === $user");
+  }
+
+  Future<List<People>> getAllParticipant(List<dynamic> idList) async {
+    List<People> peopleList = [];
+    if(idList.isEmpty){
+      return peopleList;
+    }
+    for (var i=0; i<idList.length; i++){
+      QuerySnapshot snapshot = (await _db
+          .collection('people')
+          .where ("firebase_id", isEqualTo: idList[i]).get());
+
+    var peopleJson = snapshot.docs[i].data() as Map<String, dynamic>;
+    People people = People.fromJson(peopleJson);
+    peopleList.add(people);
+    }
+
+    return peopleList;
+
   }
 }
