@@ -285,7 +285,7 @@ class _ConcoursPage extends State<ConcoursPage> {
                     controller: nameConcourController,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'Enter name of concour',
+                      labelText: 'Nom du concours',
                     ),
                   ),
                 ),
@@ -301,7 +301,7 @@ class _ConcoursPage extends State<ConcoursPage> {
                     controller: adresseConcoursController,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
-                      labelText: 'Enter adress of concour',
+                      labelText: 'Adresse du concours',
                     ),
                   ),
                 ),
@@ -311,7 +311,7 @@ class _ConcoursPage extends State<ConcoursPage> {
                     format: format,
                     controller: dateConcoursController,
                     decoration: const InputDecoration(
-                      labelText: "Date of concour",
+                      labelText: "Date du concours",
                       border: UnderlineInputBorder(),
                     ),
                     onShowPicker: (context, currentValue) {

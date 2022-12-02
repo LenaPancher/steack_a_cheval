@@ -4,6 +4,7 @@ import 'package:steack_a_cheval/models/Concours.dart';
 import 'package:steack_a_cheval/models/Cours.dart';
 import 'package:steack_a_cheval/models/Party.dart';
 import 'package:steack_a_cheval/pages/concours.dart';
+import 'package:steack_a_cheval/pages/particpant_concours.dart';
 import 'package:steack_a_cheval/pages/parties_page.dart';
 import 'package:steack_a_cheval/api/people_service.dart';
 import 'package:steack_a_cheval/models/People.dart';
@@ -11,6 +12,9 @@ import 'package:steack_a_cheval/pages/profil.dart';
 import 'package:steack_a_cheval/pages/cours.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+import 'package:steack_a_cheval/widgets/party_list_widget.dart';
+
+import '../widgets/party_card_widget.dart';
 
 class FeedPage extends StatefulWidget {
   static const tag = "feed";
@@ -257,47 +261,7 @@ class _FeedPageState extends State<FeedPage> {
                       shrinkWrap: true,
                       itemCount: concours.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          height: 120,
-                          width: MediaQuery.of(context).size.width,
-                          child: Card(
-                            elevation: 1,
-                            color: Color(0xFFEDEDED),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            concours[index].name,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 17),
-                                          ),
-                                          Text(
-                                            concours[index].adress,
-                                            style: const TextStyle(
-                                                fontStyle: FontStyle.italic),
-                                          ),
-                                        ],
-                                      ),
-                                      Text(DateFormat.yMd("fr_FR")
-                                          .format(concours[index].date)),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
+                        return cardConcours(concours: concours[index]);
                       },
                     );
                   } else if (snapshot.hasError) {
@@ -328,43 +292,7 @@ class _FeedPageState extends State<FeedPage> {
                       shrinkWrap: true,
                       itemCount: parties.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          height: 120,
-                          width: MediaQuery.of(context).size.width,
-                          child: Card(
-                            elevation: 1,
-                            color: Color(0xFFEDEDED),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        parties[index].type,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 17),
-                                      ),
-                                      Text(
-                                        parties[index].ownerComment,
-                                        style: const TextStyle(
-                                            fontStyle: FontStyle.italic),
-                                      ),
-                                      Text(DateFormat.yMd("fr_FR")
-                                          .format(parties[index].eventDate)),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
+                        return PartyCard(party: parties[index]);
                       },
                     );
                   } else if (snapshot.hasError) {
@@ -443,4 +371,112 @@ class _FeedPageState extends State<FeedPage> {
         return const Image(image: AssetImage("images/sautobstacle.jpeg"));
     }
   }
+  Widget cardConcours({required Concours concours}) {
+    var size = MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: SizedBox(
+        height: 150,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AspectRatio(
+              aspectRatio: 1.0,
+              child: Container(
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("images/concour.jpeg"),
+                        fit: BoxFit.fitHeight)),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            concours.name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                          const Padding(padding: EdgeInsets.only(bottom: 2.0)),
+                          Text(
+                            concours.adress,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 15.0,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ]),
+                    const Divider(),
+                    Row(children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        //mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            concours.author,
+                            style: const TextStyle(
+                              fontSize: 15.0,
+                              color: Colors.black54,
+                            ),
+                          ),
+                          Text(
+                            DateFormat.yMd("fr_FR").format(concours.date),
+                            style: const TextStyle(
+                              fontSize: 15.0,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ]),
+                    Expanded(
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  List<dynamic> list = concours.listPeople;
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ParticipantConcoursPage(
+                                                  listParticipant: list)));
+                                },
+                                child: Text(
+                                    '${concours.listPeople.length} partipants'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                },
+                                child: const Text('Participer'),
+                              )
+                            ]))
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
 }
