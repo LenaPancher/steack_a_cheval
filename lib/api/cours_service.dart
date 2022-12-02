@@ -14,7 +14,7 @@ class CoursService {
     }
   }
 
-  Future<List<Cours>> getCours(String id) async {
+  Future<List<Cours>> getCoursByUserId(String id) async {
     QuerySnapshot snapshot =
     await _db.collection('cours').where("owner", isEqualTo: id).get();
     List<Cours> cours = [];
@@ -25,4 +25,22 @@ class CoursService {
 
     return cours;
   }
+
+  Future<List<Cours>> getCours() async {
+    List<Cours> listCours = [];
+
+    QuerySnapshot snapshot = await _db
+        .collection('cours')
+        .get();
+
+    for (var i = 0; i < snapshot.docs.length; i++) {
+      final coursJson = snapshot.docs[i].data() as Map<String, dynamic>;
+      Cours cours = Cours.fromJson(coursJson);
+      print(cours);
+      listCours.add(cours);
+    }
+
+    return listCours;
+  }
+
 }

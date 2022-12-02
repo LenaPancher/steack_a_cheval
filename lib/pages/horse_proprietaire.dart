@@ -81,7 +81,7 @@ class _HorseProprietairePageState extends State<HorseProprietairePage> {
                               );
                               ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             },
-                            backgroundColor: Color(0xFFA73322),
+                            backgroundColor: Theme.of(context).colorScheme.primary,
                             foregroundColor: Colors.white,
                             icon: Icons.remove,
                           ),
@@ -318,7 +318,7 @@ class _HorseProprietairePageState extends State<HorseProprietairePage> {
         contentPadding: const EdgeInsets.only(left: 0.0, right: 0.0),
         title: Text(sexe[i]),
         leading: Radio<String>(
-          activeColor: const Color(0xFFA73322),
+          activeColor: Theme.of(context).colorScheme.primary,
           value: sexe[i],
           groupValue: sexeChoice,
           onChanged: (newValue) {
@@ -351,7 +351,7 @@ class _HorseProprietairePageState extends State<HorseProprietairePage> {
         contentPadding: const EdgeInsets.only(left: 0.0, right: 0.0),
         title: Text(speciality[i]),
         leading: Radio<String>(
-          activeColor: const Color(0xFFA73322),
+          activeColor: Theme.of(context).colorScheme.primary,
           value: speciality[i],
           groupValue: specialityChoice,
           onChanged: (newValue) {

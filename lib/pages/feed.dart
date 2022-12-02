@@ -3,7 +3,7 @@ import 'package:steack_a_cheval/pages/concours.dart';
 import 'package:steack_a_cheval/api/people_service.dart';
 import 'package:steack_a_cheval/models/People.dart';
 import 'package:steack_a_cheval/pages/profil.dart';
-import 'package:steack_a_cheval/pages/cours_screen.dart';
+import 'package:steack_a_cheval/pages/cours.dart';
 
 class FeedPage extends StatefulWidget {
   static const tag = "feed";

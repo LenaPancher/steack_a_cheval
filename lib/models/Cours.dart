@@ -9,10 +9,10 @@ class Cours {
 
   Cours.fromJson(Map<String, dynamic> json)
       : terrain = json['terrain'],
-        trainingDate = json['trainingDate'],
+        trainingDate = DateTime.parse(json['trainingDate'].toDate().toString()),
         duration = json['duration'],
         discipline = json['discipline'],
-        owner = json['owner'];
+        owner = json['firebase_id'];
 
 
   Map<String, dynamic> toJson() => {
@@ -20,6 +20,6 @@ class Cours {
         'trainingDate': trainingDate,
         'duration': duration,
         'discipline': discipline,
-        'owner': owner
+        'firebase_id': owner
       };
 }

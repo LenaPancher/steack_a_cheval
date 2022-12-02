@@ -73,7 +73,7 @@ class _HorseDpPageState extends State<HorseDpPage> {
                               );
                               ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             },
-                            backgroundColor: Color(0xFFA73322),
+                            backgroundColor: Theme.of(context).colorScheme.primary,
                             foregroundColor: Colors.white,
                             icon: Icons.remove,
                           ),

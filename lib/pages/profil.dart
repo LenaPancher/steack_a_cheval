@@ -106,10 +106,10 @@ class _ProfilState extends State<ProfilPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 profilePicture == null
-                    ? const CircleAvatar(
+                    ? CircleAvatar(
                         radius: 60,
-                        backgroundColor: Color(0xFFA73322),
-                        child: Icon(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        child: const Icon(
                           Icons.person,
                           color: Colors.white,
                           size: 80,
@@ -205,10 +205,10 @@ class _ProfilState extends State<ProfilPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 profilePicture == null
-                    ? const CircleAvatar(
+                    ? CircleAvatar(
                         radius: 60,
-                        backgroundColor: Color(0xFFA73322),
-                        child: Icon(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        child: const Icon(
                           Icons.person,
                           color: Colors.white,
                           size: 80,
@@ -299,7 +299,7 @@ class _ProfilState extends State<ProfilPage> {
           contentPadding: const EdgeInsets.only(left: 0.0, right: 0.0),
           title: Text(type[i]),
           leading: Radio<String>(
-            activeColor: const Color(0xFFA73322),
+            activeColor: Theme.of(context).colorScheme.primary,
             value: type[i],
             groupValue: typeChoice,
             onChanged: (newValue) {
