@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         FeedPage.tag: (context) => const FeedPage(),
         ProfilPage.tag: (context) => const ProfilPage(),
         ConcoursPage.tag: (context) => const ConcoursPage(),
-        ParticipantConcoursPage.tag: (context) => const ParticipantConcoursPage(),
+        //ParticipantConcoursPage.tag: (context) => ParticipantConcoursPage(),
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
