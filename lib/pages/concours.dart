@@ -7,6 +7,7 @@ import 'package:steack_a_cheval/models/People.dart';
 import 'package:steack_a_cheval/pages/particpant_concours.dart';
 import 'package:steack_a_cheval/models/Concours.dart';
 import 'package:steack_a_cheval/api/concours_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ConcoursPage extends StatefulWidget {
   static const tag = "concours";
@@ -28,6 +29,11 @@ class _ConcoursPage extends State<ConcoursPage> {
   TextEditingController nameConcourController = TextEditingController();
   TextEditingController adresseConcoursController = TextEditingController();
   TextEditingController dateConcoursController = TextEditingController();
+
+  final Stream<QuerySnapshot> _concoursStream = FirebaseFirestore.instance
+      .collection('concours')
+      .orderBy("date", descending: false)
+      .snapshots();
 
   @override
   void initState() {
@@ -73,22 +79,26 @@ class _ConcoursPage extends State<ConcoursPage> {
                 )),
           ],
         ),
-        body: FutureBuilder<List<Concours>>(
-          future: listConcours,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List<Concours> concours = snapshot.data!;
-              return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: concours.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return cardConcours(concours: concours[index]);
-                  });
-            } else if (snapshot.hasError) {
-              return Text(
-                  "A error occured :${snapshot.error} + ${snapshot.hasData} + ${listConcours}");
+        body: StreamBuilder<QuerySnapshot>(
+          stream: _concoursStream,
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong');
             }
-            return const Center(child: CircularProgressIndicator());
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text("Loading");
+            }
+
+            return ListView(
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                Map<String, dynamic> data =
+                    document.data()! as Map<String, dynamic>;
+                Concours concours = Concours.fromJson(data);
+                return cardConcours(concours: concours);
+              }).toList(),
+            );
           },
         ));
   }
@@ -174,9 +184,15 @@ class _ConcoursPage extends State<ConcoursPage> {
                           TextButton(
                             onPressed: () {
                               List<dynamic> list = concours.listPeople;
-                              Navigator.push(context,MaterialPageRoute(builder: (context) =>ParticipantConcoursPage(listParticipant: list)));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ParticipantConcoursPage(
+                                              listParticipant: list)));
                             },
-                            child: Text('${concours.listPeople.length} partipants'),
+                            child: Text(
+                                '${concours.listPeople.length} partipants'),
                           ),
                           TextButton(
                             onPressed: () {

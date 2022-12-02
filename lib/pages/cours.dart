@@ -3,6 +3,7 @@ import 'package:steack_a_cheval/api/cours_service.dart';
 import 'package:steack_a_cheval/api/people_service.dart';
 import 'package:steack_a_cheval/models/Cours.dart';
 import 'package:steack_a_cheval/models/People.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
@@ -34,11 +35,20 @@ class _CoursEquitationState extends State<CoursEquitation> {
 
   List<int> durationList = <int>[30, 60];
   List<String> terrainList = <String>["Carrière", "Manège"];
-  List<String> disciplineList = <String>["Dressage", "Saut d’obstacle", "Endurance"];
+  List<String> disciplineList = <String>[
+    "Dressage",
+    "Saut d’obstacle",
+    "Endurance"
+  ];
 
   int durationValue = 0;
   String terrainValue = "";
   String disciplineValue = "";
+
+  final Stream<QuerySnapshot> _coursStream = FirebaseFirestore.instance
+      .collection('cours')
+      .orderBy("trainingDate", descending: false)
+      .snapshots();
 
   @override
   initState() {
@@ -69,23 +79,27 @@ class _CoursEquitationState extends State<CoursEquitation> {
         title: const Text("Mes cours d'équitation"),
       ),
       body: Center(
-        child: FutureBuilder(
-            future: coursList,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List<Cours> cours = snapshot.data!;
-                return ListView.builder(
-                    itemCount: cours.length,
-                    itemBuilder: (context, index) {
-                      final cour = cours[index];
-                      return _card(cour);
-                    });
-              } else if (snapshot.hasError) {
-                return Text("An error occured :${snapshot.error}");
-              }
-              return const Center(child: CircularProgressIndicator());
-            }),
-      ),
+          child: StreamBuilder<QuerySnapshot>(
+        stream: _coursStream,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Text("Loading");
+          }
+
+          return ListView(
+            children: snapshot.data!.docs.map((DocumentSnapshot document) {
+              Map<String, dynamic> data =
+                  document.data()! as Map<String, dynamic>;
+              Cours cours = Cours.fromJson(data);
+              return _card(cours);
+            }).toList(),
+          );
+        },
+      )),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _dialogBuilder(context),
         tooltip: 'Add',
@@ -119,7 +133,8 @@ class _CoursEquitationState extends State<CoursEquitation> {
               child: const Text('Valider'),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  var cours = Cours(durationValue, finalDatetime, terrainValue, disciplineValue, currentUser.uid);
+                  var cours = Cours(durationValue, finalDatetime, terrainValue,
+                      disciplineValue, currentUser.uid);
                   coursService.insertCours(cours);
                   dateController.text = "";
                   timeController.text = "";
@@ -325,15 +340,21 @@ class _CoursEquitationState extends State<CoursEquitation> {
                       children: [
                         Text(
                           cours.discipline,
-                          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                          style: const TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.bold),
+                        ),
                         Text(
                           " (${cours.terrain})",
                           style: const TextStyle(fontStyle: FontStyle.italic),
                         ),
                       ],
                     ),
-                    Text("${cours.duration.toString()} min",),
-                    Text(DateFormat("dd/MM/yyyy").format(cours.trainingDate),),
+                    Text(
+                      "${cours.duration.toString()} min",
+                    ),
+                    Text(
+                      DateFormat("dd/MM/yyyy").format(cours.trainingDate),
+                    ),
                   ],
                 ),
               ),
