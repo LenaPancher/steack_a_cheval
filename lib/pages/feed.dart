@@ -150,6 +150,7 @@ class _FeedPageState extends State<FeedPage> {
                   if (snapshot.hasData) {
                     List<People> peoples = snapshot.data!;
                     return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: peoples.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -221,6 +222,7 @@ class _FeedPageState extends State<FeedPage> {
                   if (snapshot.hasData) {
                     List<Cours> cours = snapshot.data!;
                     return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: cours.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -251,6 +253,7 @@ class _FeedPageState extends State<FeedPage> {
                   if (snapshot.hasData) {
                     List<Concours> concours = snapshot.data!;
                     return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: concours.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -321,6 +324,7 @@ class _FeedPageState extends State<FeedPage> {
                   if (snapshot.hasData) {
                     List<Party> parties = snapshot.data!;
                     return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: parties.length,
                       itemBuilder: (BuildContext context, int index) {
