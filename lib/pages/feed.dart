@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:steack_a_cheval/api/feed_service.dart';
+import 'package:steack_a_cheval/models/Concours.dart';
+import 'package:steack_a_cheval/models/Cours.dart';
+import 'package:steack_a_cheval/models/Party.dart';
 import 'package:steack_a_cheval/pages/concours.dart';
 import 'package:steack_a_cheval/pages/parties_page.dart';
 import 'package:steack_a_cheval/api/people_service.dart';
 import 'package:steack_a_cheval/models/People.dart';
 import 'package:steack_a_cheval/pages/profil.dart';
 import 'package:steack_a_cheval/pages/cours.dart';
+import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 class FeedPage extends StatefulWidget {
   static const tag = "feed";
@@ -17,12 +23,22 @@ class FeedPage extends StatefulWidget {
 
 class _FeedPageState extends State<FeedPage> {
   PeopleService peopleService = PeopleService();
+  FeedService feedService = FeedService();
 
+  late Future<List<Concours>> concoursList;
+  late Future<List<People>> peopleList;
+  late Future<List<Cours>> coursList;
+  late Future<List<Party>> partyList;
 
   @override
   void initState() {
+    peopleList = feedService.getPeoples();
+    coursList = feedService.getCours();
+    concoursList = feedService.getConcours();
+    partyList = feedService.getParties();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     var primaryColor = Theme.of(context).iconTheme.color;
@@ -34,7 +50,10 @@ class _FeedPageState extends State<FeedPage> {
         leading: IconButton(
           onPressed: () {
             // Navigate to profile page
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilPage()),);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfilPage()),
+            );
           },
           icon: const Icon(Icons.person),
         ),
@@ -91,8 +110,7 @@ class _FeedPageState extends State<FeedPage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ConcoursPage())
-                  );
+                          builder: (context) => const ConcoursPage()));
                   break;
                 case 1:
                   // PUSH LA VUE COURS
@@ -116,7 +134,290 @@ class _FeedPageState extends State<FeedPage> {
           )
         ],
       ),
-      body: Text("")
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                "Nouveaux utilisateurs",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+            ),
+            FutureBuilder(
+                future: peopleList,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<People> peoples = snapshot.data!;
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: peoples.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                          height: 120,
+                          width: MediaQuery.of(context).size.width,
+                          child: Card(
+                            elevation: 1,
+                            color: Color(0xFFEDEDED),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            peoples[index].pseudo,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                          Text(
+                                            peoples[index].age,
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(peoples[index].email),
+                                      Text(peoples[index].phone),
+                                      Text(peoples[index].linkFFEProfil),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text("erreur : ${snapshot.error}");
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                }),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Divider(
+                thickness: 1,
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                "Nouveaux cours",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+            ),
+            FutureBuilder(
+                future: coursList,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Cours> cours = snapshot.data!;
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: cours.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                          height: 120,
+                          width: MediaQuery.of(context).size.width,
+                          child: Card(
+                            elevation: 1,
+                            color: Color(0xFFEDEDED),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            cours[index].discipline,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                          Text(
+                                            cours[index].terrain,
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(DateFormat.yMd("fr_FR")
+                                          .format(cours[index].trainingDate)),
+                                      Text(cours[index].duration.toString()),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text("erreur : ${snapshot.error}");
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                }),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Divider(
+                thickness: 1,
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                "Nouveaux concours",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+            ),
+            FutureBuilder(
+                future: concoursList,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Concours> concours = snapshot.data!;
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: concours.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                          height: 120,
+                          width: MediaQuery.of(context).size.width,
+                          child: Card(
+                            elevation: 1,
+                            color: Color(0xFFEDEDED),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            concours[index].name,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                          Text(
+                                            concours[index].adress,
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(DateFormat.yMd("fr_FR")
+                                          .format(concours[index].date)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text("erreur : ${snapshot.error}");
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                }),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Divider(
+                thickness: 1,
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                "Nouvelles soirées",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+            ),
+            FutureBuilder(
+                future: partyList,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Party> parties = snapshot.data!;
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: parties.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                          height: 120,
+                          width: MediaQuery.of(context).size.width,
+                          child: Card(
+                            elevation: 1,
+                            color: Color(0xFFEDEDED),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        parties[index].type,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17),
+                                      ),
+                                      Text(
+                                        parties[index].ownerComment,
+                                        style: const TextStyle(
+                                            fontStyle: FontStyle.italic),
+                                      ),
+                                      Text(DateFormat.yMd("fr_FR")
+                                          .format(parties[index].eventDate)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text("erreur : ${snapshot.error}");
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                }),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Divider(
+                thickness: 1,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
