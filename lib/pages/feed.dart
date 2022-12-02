@@ -183,10 +183,13 @@ class _FeedPageState extends State<FeedPage> {
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 17),
                                           ),
-                                          Text(
-                                            peoples[index].age,
-                                            style: const TextStyle(
-                                                fontStyle: FontStyle.italic),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 6),
+                                            child: Text(
+                                              "(${peoples[index].age} ans)",
+                                              style: const TextStyle(
+                                                  fontStyle: FontStyle.italic),
+                                            ),
                                           ),
                                         ],
                                       ),
