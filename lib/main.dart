@@ -5,10 +5,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:steack_a_cheval/pages/feed.dart';
 import 'package:steack_a_cheval/pages/horse_proprietaire.dart';
 import 'package:steack_a_cheval/pages/login.dart';
+import 'package:steack_a_cheval/pages/parties_page.dart';
 import 'package:steack_a_cheval/pages/profil.dart';
 import 'package:steack_a_cheval/pages/sign_up.dart';
 import 'package:steack_a_cheval/pages/particpant_concours.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'firebase_options.dart';
 
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       title: 'Flutter Demo',
       routes: {
         LoginPage.tag: (context) => const LoginPage(),
@@ -35,7 +38,8 @@ class MyApp extends StatelessWidget {
         FeedPage.tag: (context) => const FeedPage(),
         ProfilPage.tag: (context) => const ProfilPage(),
         ConcoursPage.tag: (context) => const ConcoursPage(),
-        ParticipantConcoursPage.tag: (context) => const ParticipantConcoursPage(),
+        //ParticipantConcoursPage.tag: (context) => ParticipantConcoursPage(),
+        PartiesPage.tag: (context) => const PartiesPage(),
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -49,6 +53,9 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('fr')
       ],
       home: const LoginPage(),
     );
