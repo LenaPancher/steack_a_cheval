@@ -56,12 +56,7 @@ class _FeedPageState extends State<FeedPage> {
                     children: [
                       Icon(Icons.content_paste, color: primaryColor),
                       SizedBox(width: 12),
-                      TextButton(
-                        onPressed: (){
-                          Navigator.of(context).pushNamed(ConcoursPage.tag);
-                        },
-                        child: Text('Concours'),
-                      ),
+                      Text('Concours')
                     ],
                   ),
                 ),
@@ -92,7 +87,11 @@ class _FeedPageState extends State<FeedPage> {
               switch (value) {
                 case 0:
                   // PUSH LA VUE CONCOURS
-
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ConcoursPage())
+                  );
                   break;
                 case 1:
                   // PUSH LA VUE COURS

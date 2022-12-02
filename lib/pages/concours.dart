@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:steack_a_cheval/api/people_service.dart';
 import 'package:steack_a_cheval/models/People.dart';
-import 'package:steack_a_cheval/pages/particpantConcours.dart';
+import 'package:steack_a_cheval/pages/particpant_concours.dart';
 import 'package:steack_a_cheval/models/Concours.dart';
 import 'package:steack_a_cheval/api/concours_service.dart';
 
