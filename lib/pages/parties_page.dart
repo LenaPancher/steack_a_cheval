@@ -85,21 +85,21 @@ class _PartiesPageState extends State<PartiesPage> {
         body: StreamBuilder<QuerySnapshot>(
           stream: _partyStream,
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-          return Text('Something went wrong');
-          }
+            if (snapshot.hasError) {
+            return Text('Something went wrong');
+            }
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
-          }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+            return Text("Loading");
+            }
 
-          return ListView(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-            Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-            Party party = Party.fromJson(data);
-            return PartyCard(party: party);
-            }).toList(),
-          );
+            return ListView(
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+              Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+              Party party = Party.fromJson(data);
+              return PartyCard(party: party);
+              }).toList(),
+            );
         },
         )
     );
