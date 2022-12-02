@@ -185,7 +185,7 @@ class _ConcoursPage extends State<ConcoursPage> {
                                               listParticipant: list)));
                             },
                             child: Text(
-                                '${concours.listPeople.length} partipants'),
+                                '${concours.listPeople.length} participants'),
                           ),
                           TextButton(
                             onPressed: () {
