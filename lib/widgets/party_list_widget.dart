@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:steack_a_cheval/widgets/party_card_widget.dart';
 
-import '../models/Party.dart';
 
 class PartyList extends StatefulWidget {
   const PartyList({Key? key}) : super(key: key);

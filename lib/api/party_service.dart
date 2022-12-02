@@ -8,6 +8,8 @@ import 'exceptions.dart';
 class PartyService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   List<Party> partyList = [];
+  PartyService();
+
 
   Future<void> insertParty(Party party) async {
     try {

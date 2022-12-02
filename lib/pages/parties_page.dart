@@ -46,11 +46,15 @@ class _PartiesPageState extends State<PartiesPage> {
   late TextEditingController dateController;
   late TextEditingController timeController;
 
+  final Stream<QuerySnapshot> _partyStream = FirebaseFirestore.instance.collection('parties').orderBy("createdAt", descending: true).snapshots();
+
+
   @override
   void initState() {
     super.initState();
     initializeDateFormatting();
     partyList = partyService.getAllParties();
+
 
     partyCommentController = TextEditingController();
     dateController = TextEditingController();
@@ -78,30 +82,35 @@ class _PartiesPageState extends State<PartiesPage> {
                 icon: const Icon(Icons.add)),
           ],
         ),
-        body: FutureBuilder<List<Party>>(
-          future: partyList,
-          builder: (context, snapshot){
-            if(snapshot.hasData){
-              List<Party> parties = snapshot.data!;
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: parties.length,
-                itemBuilder: (context, index){
-                  return PartyCard(party: parties[index]);
-                },
-              );
-            }
-            else if (snapshot.hasError){
-              return const Text("Erreur de récupération des soirées");
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
+        body: StreamBuilder<QuerySnapshot>(
+          stream: _partyStream,
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+          return Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+          }
+
+          return ListView(
+            children: snapshot.data!.docs.map((DocumentSnapshot document) {
+            Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+            Party party = Party.fromJson(data);
+            return PartyCard(party: party);
+            }).toList(),
+          );
+        },
         )
     );
   }
 
+  /*else if (snapshot.hasError){
+  return const Text("Erreur de récupération des soirées");
+  }
+  return const Center(
+  child: CircularProgressIndicator(),
+  );*/
   _dialogBuilder(BuildContext context) {
     return showDialog<void>(
       context: context,
@@ -247,9 +256,8 @@ class _PartiesPageState extends State<PartiesPage> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     setState(() {
-                      //userList.add(new_user);
+                      handlePartyForm();
                     });
-                    handlePartyForm();
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Soirée créée')),
@@ -306,7 +314,9 @@ class _PartiesPageState extends State<PartiesPage> {
     var userId = await peopleService.getCurrentUserId();
     Party party = Party(userId, partyCommentController.text,
         partyType, chosenDate, [], DateTime.now());
-
     partyService.insertParty(party);
+    //partyList = appendElements(partyList, party);
+
   }
+
 }

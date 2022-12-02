@@ -1,9 +1,7 @@
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import '../models/Party.dart';
 
 class PartyCard extends StatefulWidget {
@@ -73,7 +71,6 @@ class _PartyCardState extends State<PartyCard> {
   String getImageFromPartyType(){
     if(widget.party.type == "Apéro"){
       var random = Random().nextInt(listAperoImage.length);
-      print("images/${listAperoImage[random]}");
       return "images/${listAperoImage[random]}";
     }
     var random = Random().nextInt(listRepasImage.length);
