@@ -70,24 +70,4 @@ class PeopleService {
     var user = snapshot.docs[0].reference.update(people.toJson());
     print("USER === $user");
   }
-
-  Future<void> insertCours(Cours cours) async {
-    try {
-      await _db.collection("cours").add(cours.toJson());
-    } on FirebaseAuthException catch (e) {
-      throw Exception("Problème d'insertion");
-    }
-  }
-
-  Future<List<Cours>> getCours(String id) async {
-    QuerySnapshot snapshot =
-        await _db.collection('cours').where("owner", isEqualTo: id).get();
-    List<Cours> cours = [];
-
-    for (var element in snapshot.docs) {
-      cours.add(Cours.fromJson(element.data() as Map<String, dynamic>));
-    }
-
-    return cours;
-  }
 }

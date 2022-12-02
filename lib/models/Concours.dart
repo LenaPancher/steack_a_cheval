@@ -2,35 +2,36 @@ class Concours {
   String name;
   String author;
   String adress;
-  String date;
-  List<String> listPeople;
+  DateTime date;
+  List<dynamic> listPeople;
   String userId;
 
   Concours({
     this.name = "",
     this.author = "",
     this.adress = "",
-    this.date = "",
+    required this.date,
     this.userId = "",
     this.listPeople = const <String>[],
   });
 
   Concours.fromJson(Map<String, dynamic> json):
       name = json['name'],
+      adress = json['adresse'],
       author = json['author'],
-      adress = json['adress'],
-      date = json['date'],
-      listPeople = json['listJson'],
-      userId = json['user_Id'];
+      date = DateTime.parse(json['date'].toDate().toString()),
+      listPeople = json['listParticipant'],
+      userId = json['id_user'];
 
   Map<String, dynamic> toJson() => {
     'name': name,
+    'adresse': adress,
     'author': author,
-    'adress': adress,
     'date': date,
-    'listPeople': listPeople,
-    'user_id': userId,
+    'listParticipant': listPeople,
+    'id_user': userId,
   };
 
 
 }
+

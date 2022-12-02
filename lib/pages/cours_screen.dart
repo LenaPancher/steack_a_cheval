@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:steack_a_cheval/api/cours_service.dart';
+import 'package:steack_a_cheval/api/people_service.dart';
+import 'package:steack_a_cheval/models/Cours.dart';
 import 'package:steack_a_cheval/models/People.dart';
 
-import '../api/people_service.dart';
-import '../models/Cours.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
 
@@ -16,6 +16,7 @@ class CoursEquitation extends StatefulWidget {
 
 class _CoursEquitationState extends State<CoursEquitation> {
   PeopleService peopleService = PeopleService();
+  CoursService coursService = CoursService();
   late People currentUser;
   late List<Cours> coursList;
 
@@ -252,7 +253,7 @@ class _CoursEquitationState extends State<CoursEquitation> {
 
                     _addCardWidget(cours);
 
-                    peopleService.insertCours(cours);
+                    coursService.insertCours(cours);
 
                     Navigator.of(context).pop();
                   }

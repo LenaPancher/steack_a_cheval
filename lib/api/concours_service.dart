@@ -17,7 +17,10 @@ class ConcourService {
 
     for(var i = 0; i< snapshot.docs.length; i++){
       final concoursJson = snapshot.docs[i].data() as Map<String, dynamic>;
+      print("concours json = $concoursJson");
       Concours concours = Concours.fromJson(concoursJson);
+      print("CONCOURS = $concours");
+      print("DATEEEEEEE = ${concours.date}");
       listConcours.add(concours);
     }
 
@@ -29,7 +32,7 @@ class ConcourService {
     try {
       await _db.collection("concours").add(concours.toJson());
 
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseException catch (e) {
       throw SteakException(message: "Problème d'insertion");
 
     }
