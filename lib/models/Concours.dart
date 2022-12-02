@@ -5,6 +5,7 @@ class Concours {
   DateTime date;
   List<dynamic> listPeople;
   String userId;
+  String firebaseId;
 
   Concours({
     this.name = "",
@@ -13,6 +14,7 @@ class Concours {
     required this.date,
     this.userId = "",
     this.listPeople = const <String>[],
+    this.firebaseId = "",
   });
 
   Concours.fromJson(Map<String, dynamic> json):
@@ -21,7 +23,8 @@ class Concours {
       author = json['author'],
       date = DateTime.parse(json['date'].toDate().toString()),
       listPeople = json['listParticipant'],
-      userId = json['id_user'];
+      userId = json['id_user'],
+      firebaseId = json['firebase_id'];
 
   Map<String, dynamic> toJson() => {
     'name': name,
@@ -30,6 +33,7 @@ class Concours {
     'date': date,
     'listParticipant': listPeople,
     'id_user': userId,
+    'firebase_id': firebaseId
   };
 
 

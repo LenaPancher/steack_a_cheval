@@ -7,7 +7,7 @@ import 'package:steack_a_cheval/pages/horse_proprietaire.dart';
 import 'package:steack_a_cheval/pages/login.dart';
 import 'package:steack_a_cheval/pages/profil.dart';
 import 'package:steack_a_cheval/pages/sign_up.dart';
-import 'package:steack_a_cheval/pages/particpantConcours.dart';
+import 'package:steack_a_cheval/pages/particpant_concours.dart';
 
 
 import 'firebase_options.dart';
